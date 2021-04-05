@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 function Login() {
     return (
@@ -6,7 +7,7 @@ function Login() {
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-auto stroke-current text-indigo-500" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                           d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
                 </svg>
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -14,9 +15,9 @@ function Login() {
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600 max-w">
                     Or
-                    <a href="#" className="px-1 font-medium text-orange-600 hover:text-indigo-500">
+                    <Link to="/signup" className="px-1 font-medium text-orange-600 hover:text-indigo-500">
                         Create a free account
-                    </a>
+                    </Link>
                 </p>
             </div>
 
@@ -46,9 +47,9 @@ function Login() {
 
                         <div className="flex items-center justify-between">
                             <div className="text-sm">
-                                <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                <Link to="/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500">
                                     Forgot your password?
-                                </a>
+                                </Link>
                             </div>
                         </div>
 
@@ -73,10 +74,10 @@ function Login() {
                         </div>
 
                         <div className="mt-6">
-                            <button type="submit"
-                                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <Link to="/signup"
+                                    className="btn w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                                 Create account
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
