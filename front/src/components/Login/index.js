@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 function Login() {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-auto stroke-current text-indigo-500" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">
