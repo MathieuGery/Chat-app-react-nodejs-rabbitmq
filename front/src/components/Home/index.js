@@ -1,0 +1,56 @@
+import React, {useState} from 'react';
+import SideBarMobile from "../SideBar/SideBarMobile";
+import SideBarDesktop from "../SideBar/SideBarDesktop";
+
+function Home() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+        <div className="h-screen flex bg-gray-50 overflow-hidden">
+            {isOpen && (
+                <SideBarMobile isOpen={isOpen} setIsOpen={setIsOpen}/>
+            )}
+            {/*<!-- Static sidebar for desktop -->*/}
+            <SideBarDesktop/>
+
+            <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+                <div className="lg:hidden">
+                    <div className="bg-indigo-600 py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8">
+                        <div>
+                            <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white" alt="Workflow"/>
+                        </div>
+                        <div>
+                            <button type="button" className="-mr-3 h-12 w-12 inline-flex items-center justify-center bg-indigo-600 rounded-md text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"  onClick={() => {
+                                setIsOpen(true);
+                            }}>
+                                <span className="sr-only">Open sidebar</span>
+                                <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <main className="flex-1 flex overflow-hidden">
+                    <div className="flex-1 flex xl:overflow-hidden">
+                        <section aria-labelledby="primary-heading" className="min-w-0 flex-1 h-full flex flex-col overflow-hidden lg:order-last">
+                            <h1 id="primary-heading" className="sr-only text-black ">Account</h1>
+                            Chat
+                        </section>
+
+                        <aside className="hidden lg:block lg:flex-shrink-0 lg:order-first">
+                            <div className="h-full relative flex flex-col w-96 border-r border-gray-200 bg-white">
+                                Conversations
+                            </div>
+                        </aside>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+
+);
+}
+
+export default Home;
