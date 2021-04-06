@@ -64,8 +64,8 @@ userSchema.post('save', async function saved (doc, next) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY)
     const msg = {
       to: this.email, // Change to your recipient
-      from: 'contact.brewdex@gery.me', // Change to your verified sender
-      subject: 'BrewDex confirm account',
+      from: 'noreply.mytelegram@gery.me', // Change to your verified sender
+      subject: 'MyTelegram confirm account',
       text: 'Click here to activate',
       html: `<div><h1>Hello new user!</h1><p>Click <a href="${config.hostname}/api/auth/confirm?key=${this.activationKey}">link</a> to activate your new account.</p></div><div><h1>Hello developer!</h1><p>Feel free to change this template ;).</p></div>`
     }
