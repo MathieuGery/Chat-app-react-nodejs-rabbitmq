@@ -18,7 +18,7 @@ if (config.env === 'dev') {
 }
 
 exports.connect = () => {
-  console.log(config.env)
+  console.log("Env=", config.env)
   var mongoURI = (config.env === 'prod' || 'dev' ? config.mongo.uri : config.mongo.testURI)
 
   console.log(mongoURI);
