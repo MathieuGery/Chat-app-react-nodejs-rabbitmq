@@ -27,6 +27,7 @@
     "nodemon": "^2.0.4"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "@sendgrid/mail": "^7.4.2",
     "axios": "^0.21.1",
     "bcrypt-nodejs": "0.0.3",
