@@ -11,7 +11,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: MathieuGery/MyTelegram/back-auth
+          name: MathieuGery/MyTelegram/back-authentification
           username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_TOKEN }}
           registry: docker.pkg.github.com
