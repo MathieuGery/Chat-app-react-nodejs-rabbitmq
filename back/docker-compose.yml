@@ -1,0 +1,21 @@
+services:
+  # Launch the Redis used for syncing messages between copies of the client app
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+
+  mongodb_container:
+    image: mongo:latest
+    container_name: 'mongo-container'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: username
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - db-data:/data/db
+    ports:
+      - '27017-27019:27017-27019'
+    restart: always
+
+volumes:
+  db-data:
