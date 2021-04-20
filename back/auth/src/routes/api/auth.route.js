@@ -14,12 +14,12 @@ router.get('/confirm', authController.confirm)
 
 // Authentication example
 router.post('/secret1', auth(), (req, res) => {
-
+x
   if (!req.body.product_id) {
     res.status(400).json('No product id specified')
   }
   // example route for auth
-  axios.get('https://world.openfoodfacts.org/api/v0/product/' + req.body.product_id)
+  axios.get('' + req.body.product_id)
     .then(function (response) {
       // handle success
       res.json({ message: response.data })
