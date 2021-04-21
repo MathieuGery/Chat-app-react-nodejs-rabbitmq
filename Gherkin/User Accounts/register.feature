@@ -35,3 +35,6 @@ Feature: Register
     Given I filled 'Username', 'Email', 'Password', 'Comfirmation password'
     And my email is already used
     Then I will be warn (borders set to red on username field) with a message stating 'It seems this accountalready exists. Do you want to recover your password?' (The latest being a link to the `Recover` page, which if clicked will have the username pre-filed with the email that was set). An email will also be sent to the email address with a message stating that someone tried to access the account, and if it was him, he can just click the provided recover link; if not, he better contact the support.
+
+
+
