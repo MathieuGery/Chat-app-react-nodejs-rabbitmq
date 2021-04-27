@@ -4,7 +4,7 @@ import { ExclamationIcon } from '@heroicons/react/solid'
 
 export default function WarningAlert(props) {
     return (
-        <div className="rounded-md bg-yellow-50 p-4">
+        <div id="warning-alert-box" className="rounded-md bg-yellow-50 p-4">
             <div className="flex">
                 <div className="flex-shrink-0">
                     <ExclamationIcon className="h-5 w-5 text-yellow-400" aria-hidden="true" />

@@ -4,7 +4,7 @@ import {CheckCircleIcon} from "@heroicons/react/solid";
 
 export default function SuccessAlert(props) {
     return (
-        <div className="rounded-md bg-green-50 p-4">
+        <div id="success-alert-box" className="rounded-md bg-green-50 p-4">
             <div className="flex">
                 <div className="flex-shrink-0">
                     <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
