@@ -47,7 +47,7 @@
     "@tailwindcss/postcss7-compat": "^2.1.0",
     "autoprefixer": "^9.7.4",
     "cypress": "^7.1.0",
-    "cypress-cucumber-preprocessor": "^4.0.3",
+    "cypress-cucumber-preprocessor": "^4.1.0",
     "postcss": "^7.0.27",
     "prop-types": "^15.7.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
