@@ -3,8 +3,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt-nodejs')
 const httpStatus = require('http-status')
 const APIError = require('../utils/APIError')
-const config = require('../config')
-const sgMail = require('@sendgrid/mail')
+const mailSender = require('../services/sendgrid')
 const Schema = mongoose.Schema
 
 const roles = [
@@ -60,27 +59,7 @@ userSchema.pre('save', async function save (next) {
 })
 
 userSchema.post('save', async function saved (doc, next) {
-  try {
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-    const msg = {
-      to: this.email, // Change to your recipient
-      from: 'noreply.mytelegram@gery.me', // Change to your verified sender
-      subject: 'MyTelegram confirm account',
-      text: 'Click here to activate',
-      html: `<div><h1>Hello new user!</h1><p>Click <a href="${config.hostname}/api/auth/confirm?key=${this.activationKey}">link</a> to activate your new account.</p></div><div><h1>Hello developer!</h1><p>Feel free to change this template ;).</p></div>`
-    }
-    sgMail
-      .send(msg)
-      .then(() => {
-        console.log('Email sent')
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-    return next()
-  } catch (error) {
-    return next(error)
-  }
+  return mailSender.mailCreateAccount(next, this.email, this.activationKey);
 })
 
 userSchema.method({

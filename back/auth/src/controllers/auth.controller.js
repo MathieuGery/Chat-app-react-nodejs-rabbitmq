@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../config')
 const httpStatus = require('http-status')
 const uuidv1 = require('uuid/v1')
+const mailSender = require('../services/sendgrid')
 
 exports.register = async (req, res, next) => {
   try {
@@ -25,6 +26,7 @@ exports.login = async (req, res, next) => {
     const user = await User.findAndGenerateToken(req.body)
     const payload = {sub: user.id}
     const token = jwt.sign(payload, config.secret)
+    mailSender.mailLogin(next, user.email)
     return res.json({ message: 'OK', token: token })
   } catch (error) {
     next(error)
