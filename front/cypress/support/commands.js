@@ -7,3 +7,17 @@ Cypress.Commands.add('loginWith', ({ email, password }) =>
         .get('#submit-btn')
         .click()
 )
+
+Cypress.Commands.add('registerWith', ({username, email, password, cpassword }) =>
+    cy.visit('localhost:3000/signup')
+        .get('#username')
+        .type(username)
+        .get('#email')
+        .type(email)
+        .get('#password')
+        .type(password)
+        .get('#rep-password')
+        .type(cpassword)
+        .get('#submit-btn')
+        .click()
+)
