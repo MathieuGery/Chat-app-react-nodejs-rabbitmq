@@ -145,6 +145,4 @@ function Login(props) {
     );
 }
 
-//TODO: red border sur input et message sur input
-
 export default Login;
