@@ -6,6 +6,7 @@ const config = require('../config')
 const httpStatus = require('http-status')
 const uuidv1 = require('uuid/v1')
 const mailSender = require('../services/sendgrid')
+const bcrypt = require("bcrypt-nodejs");
 
 exports.register = async (req, res, next) => {
   try {
@@ -40,6 +41,21 @@ exports.confirm = async (req, res, next) => {
       { 'active': true }
     )
     return res.json({ message: 'Account confirmed' })
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.recoverPasswordFinal = async (req, res, next) => {
+  try {
+    if (!req.query.key || !req.body.password) return res.status(httpStatus.BAD_REQUEST)
+    console.log(req.body.password)
+    const newPasswordHash = bcrypt.hashSync(req.body.password)
+    await User.findOneAndUpdate(
+        { 'activationKey': req.query.key },
+        { $set: { 'password': newPasswordHash, 'activationKey': '' } }
+    )
+    return res.json({ message: 'New password set' })
   } catch (error) {
     next(error)
   }
