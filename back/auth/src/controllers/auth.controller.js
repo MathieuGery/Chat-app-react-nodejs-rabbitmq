@@ -39,7 +39,18 @@ exports.confirm = async (req, res, next) => {
       { 'activationKey': req.query.key },
       { 'active': true }
     )
-    return res.json({ message: 'OK' })
+    return res.json({ message: 'Account confirmed' })
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.recoverPassword = async (req, res, next) => {
+  try {
+    const user = await User.findAndRecoverPassword(req.body)
+    mailSender.mailRecover(next, user.email, user.activationKey)
+    console.log(user.email)
+    return res.json({ message: 'An email was sent to recover your password' })
   } catch (error) {
     next(error)
   }

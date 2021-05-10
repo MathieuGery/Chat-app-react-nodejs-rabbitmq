@@ -30,9 +30,13 @@ const mailCreateAccount = (next, email, activationKey) => {
 };
 
 const mailLogin = (next, email) => {
-    console.log(email)
     return sendMail(next, email, 'MyTelegram login notification', 'Click here to see infos', `<div><h1>Hello user!</h1><p>A new connection was established </p></div>`)
+};
+
+const mailRecover = (next, email, recoverKey) => {
+    return sendMail(next, email, 'MyTelegram recover password', 'Click here to see infos', `<div><h1>Hello user!</h1><p>Do you want to recover your password  clik on this <a href="${config.frontUrl}/api/auth/confirm?key=${activationKey}">link</a></p></div>`)
 };
 
 exports.mailCreateAccount = mailCreateAccount;
 exports.mailLogin = mailLogin;
+exports.mailRecover = mailRecover;

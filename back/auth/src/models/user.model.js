@@ -25,6 +25,7 @@ const userSchema = new Schema({
   },
   name: {
     type: String,
+    unique: true,
     maxlength: 50
   },
   activationKey: {
@@ -107,6 +108,18 @@ userSchema.statics = {
     const passwordOK = await user.passwordMatches(password)
 
     if (!passwordOK) throw new APIError(`Password mismatch`, httpStatus.UNAUTHORIZED)
+
+    if (!user.active) throw new APIError(`User not activated`, httpStatus.UNAUTHORIZED)
+
+    return user
+  },
+
+  async findAndRecoverPassword (payload) {
+    const { email } = payload
+    if (!email) throw new APIError('Email must be provided for login')
+
+    const user = await this.findOne({ email }).exec()
+    if (!user) throw new APIError(`No user associated with ${email}`, httpStatus.NOT_FOUND)
 
     if (!user.active) throw new APIError(`User not activated`, httpStatus.UNAUTHORIZED)
 
