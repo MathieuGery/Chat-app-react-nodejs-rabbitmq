@@ -34,11 +34,9 @@ function Login(props) {
     function buildAlert() {
         if (alertMessage.success) {
             return (<SuccessAlert title={"Success !"}>{alertMessage.success}</SuccessAlert>)
-        }
-        else if (alertMessage.warning) {
+        } else if (alertMessage.warning) {
             return (<WarningAlert title={"Warning !"}>{alertMessage.warning}</WarningAlert>)
-        }
-        else if (alertMessage.error) {
+        } else if (alertMessage.error) {
             return (<ErrorAlert title={"Error !"}>{alertMessage.error}</ErrorAlert>)
         }
     }
