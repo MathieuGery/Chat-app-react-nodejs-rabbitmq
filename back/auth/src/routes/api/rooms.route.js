@@ -7,8 +7,10 @@ const validator = require('express-validation')
 const { create } = require('../../validations/rooms.validation')
 const auth = require('../../middlewares/authorization')
 
-router.post('/create', validator(create), roomsController.create)
 router.get('/list', roomsController.listRooms)
+router.post('/create', validator(create), roomsController.create)
+router.post('/edit', roomsController.editRoom)
+
 router.get('/cr', auth(), (req, res) => {
     res.status(400).json('Secret1 route')
 })

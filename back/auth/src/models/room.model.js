@@ -1,10 +1,8 @@
 'use strict'
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt-nodejs')
 const httpStatus = require('http-status')
 const APIError = require('../utils/APIError')
 const Schema = mongoose.Schema
-const userSchema = require('./user.model')
 
 const roomSchema = new Schema({
     name: {
@@ -54,6 +52,21 @@ roomSchema.statics = {
         return err
     },
 
+    checkRoomExist (err) {
+        if (err.code === 11000) {
+            const error = new Error('Room not found')
+            error.errors = [{
+                field: 'name',
+                location: 'body',
+                messages: ['Room not found']
+            }]
+            error.status = httpStatus.CONFLICT
+            return error
+        }
+
+        return err
+    },
+
     async listAllRooms () {
         const rooms = await this.find({ }).exec()
         if (!rooms) throw new APIError(`No rooms associated with ${rooms}`, httpStatus.NOT_FOUND)
@@ -61,16 +74,26 @@ roomSchema.statics = {
         return ({ rooms: rooms })
     },
 
-    async findAndRecoverPassword (payload) {
-        const { email } = payload
-        if (!email) throw new APIError('Email must be provided for login')
+    async editRoom (payload, roomName) {
+        const { creator, name, members } = payload
+        const update = { creator: creator, name: name, members: members}
+        if (!name) throw new APIError('Room name must be provided')
 
-        const user = await this.findOne({ email }).exec()
-        if (!user) throw new APIError(`No user associated with ${email}`, httpStatus.NOT_FOUND)
-
-        if (!user.active) throw new APIError(`User not activated`, httpStatus.UNAUTHORIZED)
-
-        return user
+        return await this.findOneAndUpdate({name: roomName}, {$set: update}, {upsert: true, new: true}, function (err, res) {
+            const error = new Error('Room already taken')
+            if (!res) {
+                return error
+            }
+            if (err) {
+                error.errors = [{
+                    field: 'name',
+                    location: 'body',
+                    messages: ['Room already taken']
+                }]
+                error.status = httpStatus.CONFLICT
+                return error
+            }
+        })
     },
 
     async findAndRecoverPasswordFinal (payload) {
