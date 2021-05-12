@@ -19,6 +19,7 @@ function Login(props) {
             if (response.success) {
                 setAlertMessage({success: "You have been authenticated"})
                 Cookies.set('jwt', response.token, {expires: 91});
+                Cookies.set('username', response.username, {expires: 91});
                 setTimeout(() => {
                     props.history.push('/contact');
                 }, 500);

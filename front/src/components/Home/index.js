@@ -3,7 +3,7 @@ import SideBarMobile from "../SideBar/SideBarMobile";
 import SideBarDesktop from "../SideBar/SideBarDesktop";
 import ChatList from "../ChatList";
 import Chat from "../Chat";
-import {chatSocket} from "../../helpers/socket";
+import {getChatMessageSocket, identifyUserChatSocket} from "../../helpers/socket";
 
 function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +11,8 @@ function Home() {
 
 
     useEffect(() => {
-        chatSocket(setMessage)
+        getChatMessageSocket(setMessage)
+        identifyUserChatSocket("test")
     }, []);
 
     return (

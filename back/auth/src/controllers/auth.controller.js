@@ -28,7 +28,7 @@ exports.login = async (req, res, next) => {
     const payload = {sub: user.id}
     const token = jwt.sign(payload, config.secret)
     mailSender.mailLogin(next, user.email)
-    return res.json({ message: 'OK', token: token, username: user.username, email: user.email})
+    return res.json({ message: 'OK', token: token, username: user.name, email: user.email})
   } catch (error) {
     next(error)
   }
