@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import SideBarMobile from "../SideBar/SideBarMobile";
 import SideBarDesktop from "../SideBar/SideBarDesktop";
 import ChatList from "../ChatList";
+import Chat from "../Chat";
 
 function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +43,7 @@ function Home() {
 
                         <aside className="hidden lg:block lg:flex-shrink-0 flex-1">
                             <div className="h-full relative flex flex-col w-96 border-r border-gray-200 bg-white">
-                                Chat
+                                <Chat/>
                             </div>
                         </aside>
                     </div>
