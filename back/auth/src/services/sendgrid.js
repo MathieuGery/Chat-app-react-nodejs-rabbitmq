@@ -34,7 +34,7 @@ const mailLogin = (next, email) => {
 };
 
 const mailRecover = (next, email, recoverKey) => {
-    return sendMail(next, email, 'MyTelegram recover password', 'Click here to see infos', `<div><h1>Hello user!</h1><p>Do you want to recover your password  clik on this <a href="${config.frontUrl}/recover_password?key=${recoverKey}">link</a></p></div>`)
+    return sendMail(next, email, 'MyTelegram recover password', 'Click here to see infos', `<div><h1>Hello user!</h1><p>Do you want to recover your password  clik on this <a href="${config.frontUrl}/recover_password/:key=${recoverKey}">link</a></p></div>`)
 };
 
 const mailConfirmNewPassword = (next, email) => {
