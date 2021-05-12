@@ -8,8 +8,8 @@ const { create } = require('../../validations/rooms.validation')
 const auth = require('../../middlewares/authorization')
 
 router.get('/list', auth(), roomsController.listRooms)
-router.post('/create', validator(create), roomsController.create)
-router.post('/edit', roomsController.editRoom)
+router.post('/create', auth(), validator(create), roomsController.create)
+router.post('/edit', auth(), roomsController.editRoom)
 
 router.get('/cr', auth(), (req, res) => {
     res.status(400).json('Secret1 route')
