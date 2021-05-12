@@ -1,7 +1,11 @@
 let app = require('express')();
 let http = require('http').createServer(app);
 const PORT = process.env.PORT || 8080;
-let io = require('socket.io')(http)
+let io = require('socket.io')(http,{
+    cors: {
+      origin: "http://localhost:3000",
+      credentials: true
+    }} )
 const mongoose = require('mongoose');
 
 

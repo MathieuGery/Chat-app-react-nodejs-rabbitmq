@@ -1,15 +1,12 @@
 import {useState} from "react";
-
-function sendMessage(message) {
-    console.log(message);
-}
+import {sendMessageSocket} from "../../helpers/socket";
 
 export default function Chat() {
     const [message, setMessage] = useState("");
 
     return (
         <div className="absolute insert-x-0 bottom-0 my-4">
-            <form noValidate onSubmit={(e) => {sendMessage(message); setMessage(""); e.preventDefault();}}>
+            <form noValidate onSubmit={(e) => {sendMessageSocket(message); setMessage(""); e.preventDefault();}}>
                 <input
                     type="text"
                     name="message"

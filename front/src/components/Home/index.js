@@ -1,11 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import SideBarMobile from "../SideBar/SideBarMobile";
 import SideBarDesktop from "../SideBar/SideBarDesktop";
 import ChatList from "../ChatList";
 import Chat from "../Chat";
+import {chatSocket} from "../../helpers/socket";
 
 function Home() {
     const [isOpen, setIsOpen] = useState(false);
+    const [message, setMessage] = useState("'");
+
+
+    useEffect(() => {
+        chatSocket(setMessage)
+    }, []);
 
     return (
         <div className="h-screen flex bg-gray-50 overflow-hidden">
