@@ -5,8 +5,8 @@ const sendMail = (next, email, subject, text, message) => {
     try {
         sgMail.setApiKey(process.env.SENDGRID_API_KEY)
         const msg = {
-            to: email, // Change to your recipient
-            from: 'noreply.mytelegram@gery.me', // Change to your verified sender
+            to: email,
+            from: 'noreply.mytelegram@gery.me',
             subject: subject,
             text: text,
             html: message
