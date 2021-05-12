@@ -7,7 +7,7 @@ const validator = require('express-validation')
 const { create } = require('../../validations/rooms.validation')
 const auth = require('../../middlewares/authorization')
 
-router.get('/list', roomsController.listRooms)
+router.get('/list', auth(), roomsController.listRooms)
 router.post('/create', validator(create), roomsController.create)
 router.post('/edit', roomsController.editRoom)
 

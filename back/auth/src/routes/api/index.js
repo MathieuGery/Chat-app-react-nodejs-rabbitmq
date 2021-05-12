@@ -8,4 +8,5 @@ router.get('/status', (req, res) => { res.send({status: 'OK'}) }) // api status
 
 router.use('/auth', authRouter) // mount auth paths
 router.use('/rooms', roomsRouter)
+
 module.exports = router

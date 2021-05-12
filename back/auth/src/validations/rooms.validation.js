@@ -2,7 +2,7 @@
 
 const Joi = require('joi')
 
-// User validation rules
+// Room validation rules
 module.exports = {
     create: {
         body: {

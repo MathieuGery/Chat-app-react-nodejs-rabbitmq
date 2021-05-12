@@ -19,7 +19,6 @@ const sendMail = (next, email, subject, text, message) => {
             .catch((error) => {
                 console.error(error)
             })
-        return next()
     } catch (error) {
         return next(error)
     }

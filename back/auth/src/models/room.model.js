@@ -95,17 +95,6 @@ roomSchema.statics = {
             }
         })
     },
-
-    async findAndRecoverPasswordFinal (payload) {
-        const { activationKey } = payload
-
-        const user = await this.findOne({ activationKey }).exec()
-        if (!user) throw new APIError(`No user associated with ${email}`, httpStatus.NOT_FOUND)
-
-        if (!user.active) throw new APIError(`User not activated`, httpStatus.UNAUTHORIZED)
-
-        return user
-    }
 }
 
 module.exports = mongoose.model('Room', roomSchema)
