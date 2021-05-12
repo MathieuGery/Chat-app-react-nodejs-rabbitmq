@@ -19,8 +19,14 @@ client.connect(function (err, db) {
 
 function setConnectedUser(username, status) {
     const update = { connected: status };
-    connected_users_db?.updateOne({name: username}, {$set: update}, function (err, res) {
-        if (err) throw err;
+    connected_users_db?.findOneAndUpdate({name: username}, {$set: update}, function (err, res) {
+        if (!res.value) {
+            console.log("No user found");
+        }
+        if (err)  {
+            console.log("ca va pas");
+            throw err;
+        }
     });
 }
 

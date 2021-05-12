@@ -38,7 +38,7 @@ const mailRecover = (next, email, recoverKey) => {
 };
 
 const mailConfirmNewPassword = (next, email) => {
-    return sendMail(next, email, 'MyTelegram recover password', 'Click here to see infos', `<div><h1>Hello user!</h1><p>Your password as been successfully reset</p></div>`)
+    return sendMail(next, email, 'MyTelegram new password as been set', 'Click here to see infos', `<div><h1>Hello user!</h1><p>Your password as been successfully reset</p></div>`)
 };
 
 exports.mailCreateAccount = mailCreateAccount;
