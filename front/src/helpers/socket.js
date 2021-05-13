@@ -1,5 +1,5 @@
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "https://toto.pickeat.fr";
+const ENDPOINT = "https://chatsocket-modern-js.herokuapp.com";
 const socket = socketIOClient(ENDPOINT);
 
 function getChatMessageSocket(setMessage) {
