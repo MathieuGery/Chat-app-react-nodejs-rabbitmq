@@ -1,5 +1,5 @@
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "https://chatsocket-modern-js.herokuapp.com";
 const socket = socketIOClient(ENDPOINT);
 
 function getChatMessageSocket(setMessage) {
