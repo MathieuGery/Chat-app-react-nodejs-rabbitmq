@@ -1,6 +1,5 @@
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "https://toto.pickeat.fr";
-const socket = socketIOClient(ENDPOINT);
+const socket = socketIOClient(process.env.REACT_APP_CHAT_SERVER_URL);
 
 function getChatMessageSocket(setMessage) {
     socket.on("message", message => {
