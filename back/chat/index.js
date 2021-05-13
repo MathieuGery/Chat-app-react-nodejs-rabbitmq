@@ -3,6 +3,7 @@ require('dotenv').config()
 let http = require('http').createServer(app);
 const PORT = process.env.PORT || 8080;
 const mongoose = require('./mongoose');
+var rabbitConn = require('./rabbitmq')
 
 mongoose.connect();
 
@@ -37,6 +38,39 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
         console.log("Username: ", username)
         mongoose.setConnectedUser(username, true);
         socket.username = username;
+
+        //Conexion with rabbitmq to get all messages
+        rabbitConn(function(conn){
+            conn.createChannel(function(err, ch) {
+                if (err) {
+                    throw new Error(err)
+                }
+                var q = 'chat_q'
+                ch.assertQueue(q, {durable: true}, function(err, status) {
+                    if (err) {
+                        throw new Error(err)
+                    }
+                    else if (status.messageCount === 0) {
+                        io.emit('message', '{"messages": 0}');
+                    } else {
+                        let numChunks = 0;
+                        let array = []
+                        ch.consume(q.que, function(msg) {
+                            let resChunk = msg.content.toString()
+
+                            array.push(JSON.parse(resChunk))
+                            console.log(JSON.parse(resChunk))
+                            numChunks += 1
+                            if (numChunks === status.messageCount) {
+                                io.emit('message', array);
+                                ch.close(function() {conn.close()})
+                            }
+                        })
+                    }
+                })
+            }, {noAck: true})
+
+    })
     })
 
     //join channel for now it works with socket later it will work with rabbitmq
@@ -85,3 +119,4 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
     });
 
 });
+
