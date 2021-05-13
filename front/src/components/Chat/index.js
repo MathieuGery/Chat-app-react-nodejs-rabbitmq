@@ -1,13 +1,14 @@
 import {useState} from "react";
 import {sendMessageSocket} from "../../helpers/socket";
 import Message from "./Message";
+import Cookies from "js-cookie";
 
 export default function Chat(props) {
     const [message, setMessage] = useState("");
 
     const sendMessage = (e) => {
         if (message !== "") {
-            sendMessageSocket(message);
+            sendMessageSocket(message, Cookies.get("username"));
             setMessage("");
             e.preventDefault();
         }

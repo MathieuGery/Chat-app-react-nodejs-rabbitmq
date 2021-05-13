@@ -1,5 +1,5 @@
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "https://toto.pickeat.fr";
+const ENDPOINT = "http://localhost:8080";
 const socket = socketIOClient(ENDPOINT);
 
 function getChatMessageSocket(setMessage) {
@@ -9,10 +9,9 @@ function getChatMessageSocket(setMessage) {
     });
 }
 
-function sendMessageSocket(message) {
+function sendMessageSocket(message, username) {
     if (!message) return
-    console.log(message)
-    socket.emit("send-message", message);
+    socket.emit("send-message", {message: message, username: username});
 }
 
 function identifyUserChatSocket(username) {

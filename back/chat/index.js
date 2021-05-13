@@ -10,7 +10,7 @@ mongoose.connect();
 
 let io = require('socket.io')(http,{
     cors: {
-      origin: 'https://my-telegram.gery.me',
+      origin: '*',
       credentials: false
     }} )
 
@@ -108,6 +108,23 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
     //Send message
     socket.on('send-message', message => {
         console.log("New message: ", message);
+
+        //Send message to rabbitmq
+        rabbitConn(function(conn) {
+            conn.createChannel(function(err, ch) {
+                if (err) {
+                    throw new Error(err)
+                }
+                let ex = 'chat_ex'
+                let q = 'chat_q'
+
+                ch.assertExchange(ex, 'fanout', {durable: false})
+                ch.publish(ex, '', new Buffer(JSON.stringify(message)), {persistent: false})
+                ch.assertQueue(q, {durable: true})
+                ch.sendToQueue(q, new Buffer(JSON.stringify(message)), {persistent: true})
+                ch.close(function() {conn.close()})
+            })
+        })
         io.emit('message', message);
     });
 
