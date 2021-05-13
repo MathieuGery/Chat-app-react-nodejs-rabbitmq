@@ -10,7 +10,7 @@ mongoose.connect();
 
 let io = require('socket.io')(http,{
     cors: {
-      origin: 'https://my-telegram.gery.me:*',
+      origin: '*',
       credentials: false
     }} )
 
