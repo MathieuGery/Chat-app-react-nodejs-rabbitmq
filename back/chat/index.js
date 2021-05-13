@@ -4,6 +4,7 @@ let http = require('http').createServer(app);
 const PORT = process.env.PORT || 8080;
 const mongoose = require('./mongoose');
 var rabbitConn = require('./rabbitmq')
+const cors = require('cors')
 
 mongoose.connect();
 
@@ -25,6 +26,7 @@ let STATIC_CHANNELS = [{
     sockets: []
 }];
 
+app.use(cors());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Credentials', false);
     res.header('Access-Control-Allow-Origin', '*');
