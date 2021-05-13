@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 
 
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://dbUser:H3ljVKmxsVBc4fiu@cluster0.yjsgw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = process.env.MONGOURI;
 const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 client.connect(function (err, db) {
