@@ -1,39 +1,16 @@
 let app = require('express')();
+require('dotenv').config()
 let http = require('http').createServer(app);
 const PORT = process.env.PORT || 8080;
+const mongoose = require('./mongoose');
+
+mongoose.connect();
+
 let io = require('socket.io')(http,{
     cors: {
       origin: "*",
       credentials: true
     }} )
-const mongoose = require('mongoose');
-
-
-const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.MONGOURI;
-const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true});
-
-client.connect(function (err, db) {
-    if (err) throw err;
-    let dbo = db.db("myFirstDatabase");
-    connected_users_db = dbo.collection("users");
-    console.log("MongoDB Connected")
-});
-
-
-function setConnectedUser(username, status) {
-    const update = { connected: status };
-    connected_users_db?.findOneAndUpdate({name: username}, {$set: update}, function (err, res) {
-        if (!res.value) {
-            console.log("No user found");
-        }
-        if (err)  {
-            console.log("ca va pas");
-            throw err;
-        }
-    });
-}
-
 
 let STATIC_CHANNELS = [{
     name: 'Global chat',
@@ -47,13 +24,6 @@ let STATIC_CHANNELS = [{
     sockets: []
 }];
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Credentials', false);
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-})
-
-
 http.listen(PORT, () => {
     console.log(`listening on *:${PORT}`);
 });
@@ -65,7 +35,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
     //Identify the user
     socket.on('identify', username => {
         console.log("Username: ", username)
-        setConnectedUser(username, true);
+        mongoose.setConnectedUser(username, true);
         socket.username = username;
     })
 
@@ -102,7 +72,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
     //When user is disconnected
     socket.on('disconnect', () => {
         console.log("User disconnected")
-        setConnectedUser(socket.username, false);
+        mongoose.setConnectedUser(socket.username, false);
 
         STATIC_CHANNELS.forEach(c => {
             let index = c.sockets.indexOf(socket.id);
