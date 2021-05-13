@@ -1,6 +1,7 @@
 const rooms = [
     {
         name: 'Jane Cooper',
+        id: 1,
         title: 'Regional Paradigm Technician',
         role: 'Admin',
         email: 'janecooper@example.com',
@@ -10,6 +11,7 @@ const rooms = [
     },
     {
         name: 'Jane Cooper',
+        id: 2,
         title: 'Regional Paradigm Technician',
         role: 'Admin',
         email: 'janecooper@example.com',
@@ -19,14 +21,14 @@ const rooms = [
     },
 ]
 
-function ChatList() {
+function ChatList(props) {
     return (
         <div className="mx-2 overflow-y-auto">
             <ul className="divide-y divide-gray-200">
-                {rooms.map((room) => (
-                    <li className="px-6 py-5 relative">
+                {rooms.map((room, index) => (
+                    <li key={index} className="px-6 py-5 relative">
                         <div className="group flex justify-between items-center">
-                            <a href="#" className="-m-1 p-1 block">
+                            <a href="#" className="-m-1 p-1 block" onClick={(e) => props.setRoomId(room.id)}>
                                 <div className="absolute inset-0 group-hover:bg-gray-50" aria-hidden="true"/>
                                 <div className="flex-1 flex items-center min-w-0 relative">
                     <span className="flex-shrink-0 inline-block relative">

@@ -11,7 +11,7 @@ function App() {
             <div className="">
                 <Switch>
                     <Route exact path="/" component={Login}/>
-                    <Route exact path="/home" component={Home}/>
+                    <Route exact path="/contact" component={Home}/>
                     <Route exact path="/signup" component={SignUp}/>
                     <Route exact path="/forgot-password" component={ForgotPassword}/>
                     <Route exact path="/recover_password/:key" component={RecoverPassword}/>
