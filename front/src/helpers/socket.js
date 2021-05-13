@@ -1,5 +1,5 @@
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://20.188.58.9";
+const ENDPOINT = "https://toto.pickeat.fr";
 const socket = socketIOClient(ENDPOINT);
 
 function getChatMessageSocket(setMessage) {
