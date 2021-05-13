@@ -18,8 +18,8 @@ function Login(props) {
         login(email, password).then((response) => {
             if (response.success) {
                 setAlertMessage({success: "You have been authenticated"})
-                Cookies.set('jwt', response.token, {expires: 91});
-                Cookies.set('username', response.username, {expires: 91});
+                Cookies.set('jwt', response.success.token, {expires: 91});
+                Cookies.set('username', response.success.username, {expires: 91});
                 setTimeout(() => {
                     props.history.push('/contact');
                 }, 500);

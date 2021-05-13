@@ -3,8 +3,8 @@ import SideBarMobile from "../SideBar/SideBarMobile";
 import SideBarDesktop from "../SideBar/SideBarDesktop";
 import ChatList from "../ChatList";
 import Chat from "../Chat";
-import Cookies from "js-cookie";
 import {getChatMessageSocket, identifyUserChatSocket} from "../../helpers/socket";
+
 
 function Home() {
     const [isOpen, setIsOpen] = useState(false);
