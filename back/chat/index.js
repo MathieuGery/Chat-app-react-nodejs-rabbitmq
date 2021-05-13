@@ -9,8 +9,8 @@ mongoose.connect();
 
 let io = require('socket.io')(http,{
     cors: {
-      origin: "https://my-telegram.gery.me",
-      credentials: true
+      origin: '*',
+      credentials: false
     }} )
 
 let STATIC_CHANNELS = [{
@@ -24,6 +24,12 @@ let STATIC_CHANNELS = [{
     id: 2,
     sockets: []
 }];
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', false);
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+})
 
 http.listen(PORT, () => {
     console.log(`listening on *:${PORT}`);
