@@ -8,13 +8,13 @@ import {getChatMessageSocket, identifyUserChatSocket} from "../../helpers/socket
 
 function Home() {
     const [isOpen, setIsOpen] = useState(false);
-    const [message, setMessage] = useState("'");
+    // const [message, setMessage] = useState("'");
     const [roomId, setRoomId] = useState("'");
 
 
     useEffect(() => {
-        getChatMessageSocket(setMessage)
-        identifyUserChatSocket("test")
+        //getChatMessageSocket(setMessage)
+        // identifyUserChatSocket("test")
     }, []);
 
     return (

@@ -9,6 +9,7 @@ const socket = socketIOClient(process.env.REACT_APP_CHAT_SERVER_URL, {
 
 function getChatMessageSocket(setMessages) {
     socket.on("get-messages", messages => {
+        console.log(messages);
         setMessages(messages)
     });
 }

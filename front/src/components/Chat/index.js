@@ -2,23 +2,43 @@ import {useState, useEffect} from "react";
 import {getChatMessageSocket, identifyUserChatSocket, sendMessageSocket} from "../../helpers/socket";
 import Message from "./Message";
 import Cookies from "js-cookie";
+import socketIOClient from "socket.io-client";
 
 export default function Chat(props) {
     const [message, setMessage] = useState("");
-    const [allMessages, setAllMessages] = useState([{message: "toto"}]);
+    const [allMessages, setAllMessages] = useState([]);
 
     const sendMessage = (e) => {
         if (message !== "") {
             sendMessageSocket(message, Cookies.get("username"));
             setMessage("");
             e.preventDefault();
-
         }
     }
 
     useEffect(() => {
-        getChatMessageSocket(setAllMessages)
-    }, [allMessages]);
+        // getChatMessageSocket(setAllMessages)
+        const token = Cookies.get("jwt");
+        const username = Cookies.get("username");
+        const socket = socketIOClient(process.env.REACT_APP_CHAT_SERVER_URL, {
+            query: {token, username}
+        });
+        identifyUserChatSocket(username);
+        socket.on("get-messages", messages => {
+            console.log('ok');
+            setAllMessages(messages)
+        });
+    }, []);
+
+    const buildMessageList = () => {
+        console.log(allMessages);
+        if (allMessages.length === 0) {
+            return <div className="w-full text-center mt-6 text-gray-500">No messages</div>
+        }
+        return allMessages?.map((message, index) => {
+            return <Message key={index} sent={message.username === Cookies.get("username")} text={message.message}/>
+        })
+    };
 
     return (
         <div className="flex flex-col w-full">
@@ -26,9 +46,7 @@ export default function Chat(props) {
                 <p>Room ID: {props.roomId}</p>
             </div>
             <div className="flex flex-col overflow-y-auto">
-                {allMessages.map((message, index) => (
-                    <Message key={index} sent text={message.message}/>
-                ))}
+                {buildMessageList()}
             </div>
             <form noValidate onSubmit={(e) => {sendMessage(e)}}>
                 <div className="absolute inset-x-0 bottom-0 flex flex-row m-2">
