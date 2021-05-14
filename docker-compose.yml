@@ -10,7 +10,7 @@ services:
       - APP_SECRET=longrandomkey
       - MONGOURI=mongodb://mongo:27017/chatapp
       - SENDGRID_API_KEY=
-      - FRONTURL=https://my-telegram.gery.me
+      - FRONTURL=http://localhost:3000
     ports:
       - 5000:5000
     depends_on:
@@ -21,6 +21,7 @@ services:
     environment:
       - MONGOURI=mongodb://mongo:27017/chatapp
       - RABBITMQURI=amqp://rabbit
+      - APP_SECRET=longrandomkey
     ports:
       - 8080:8080
     depends_on:
