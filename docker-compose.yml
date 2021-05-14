@@ -22,6 +22,7 @@ services:
       - MONGOURI=mongodb://mongo:27017/chatapp
       - RABBITMQURI=amqp://rabbit
       - APP_SECRET=longrandomkey
+      - CORS_RULES=http://localhost:3000
     ports:
       - 8080:8080
     depends_on:
