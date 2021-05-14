@@ -4,8 +4,7 @@ import Cookies from 'js-cookie';
 const token = Cookies.get("jwt");
 const username = Cookies.get("username");
 const socket = socketIOClient(process.env.REACT_APP_CHAT_SERVER_URL, {
-    query: {token, username},
-    transports: ["websocket"]
+    query: {token, username}
 });
 
 function getChatMessageSocket(setMessages) {
