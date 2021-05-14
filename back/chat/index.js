@@ -5,12 +5,13 @@ const PORT = process.env.PORT || 8080;
 const mongoose = require('./mongoose');
 var rabbitConn = require('./rabbitmq')
 const cors = require('cors')
+const jwt = require('jsonwebtoken');
 
 mongoose.connect();
 
 let io = require('socket.io')(http,{
     cors: {
-      origin: '*',
+      origin: '*:*',
       credentials: false
     }} )
 
@@ -29,7 +30,7 @@ let STATIC_CHANNELS = [{
 app.use(cors());
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', '*:*');
     next();
 })
 
@@ -37,15 +38,26 @@ http.listen(PORT, () => {
     console.log(`listening on *:${PORT}`);
 });
 
-io.on('connection', (socket) => { // socket object may be used to send specific messages to the new connected client
-    console.log('New client connected');
+io.use(function(socket, next){
+    if (socket.handshake.query && socket.handshake.query.token){
+        jwt.verify(socket.handshake.query.token, process.env.APP_SECRET, function(err, decoded) {
+            if (err) return next(new Error('Authentication error'));
+            socket.decoded = decoded;
+            next();
+        });
+    }
+    else {
+        next(new Error('Authentication error'));
+    }
+})
+.on('connection', (socket) => { // socket object may be used to send specific messages to the new connected client
     socket.emit('connection', null);
-
+    mongoose.setConnectedUser(socket.handshake.query.username, true);
+    socket.username = socket.handshake.query.username;
+    console.log('New client connected with username: ', socket.username);
     //Identify the user
-    socket.on('identify', username => {
+    socket.on('get-messages', username => {
         console.log("Username: ", username)
-        mongoose.setConnectedUser(username, true);
-        socket.username = username;
 
         //Conexion with rabbitmq to get all messages
         rabbitConn(function(conn){
@@ -59,7 +71,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
                         throw new Error(err)
                     }
                     else if (status.messageCount === 0) {
-                        io.emit('list_messages', '{"messages": "no message"}');
+                        io.emit('get-messages', '{"messages": "no message"}');
                     } else {
                         let numChunks = 0;
                         let array = []
@@ -70,7 +82,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
                             console.log(JSON.parse(resChunk))
                             numChunks += 1
                             if (numChunks === status.messageCount) {
-                                io.emit('list_messages', array);
+                                io.emit('get-messages', array);
                                 ch.close(function() {conn.close()})
                             }
                         })
@@ -137,7 +149,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
                         throw new Error(err)
                     }
                     else if (status.messageCount === 0) {
-                        io.emit('list_messages', '{"messages": "no message"}');
+                        io.emit('get-messages', '{"messages": "no message"}');
                     } else {
                         let numChunks = 0;
                         let array = []
@@ -148,7 +160,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
                             console.log(JSON.parse(resChunk))
                             numChunks += 1
                             if (numChunks === status.messageCount) {
-                                io.emit('list_messages', array);
+                                io.emit('get-messages', array);
                                 ch.close(function() {conn.close()})
                             }
                         })
@@ -157,7 +169,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
             }, {noAck: true})
 
     })
-        //io.emit('list_messages', message);
+        //io.emit('get-messages', message);
     });
 
     //When user is disconnected
