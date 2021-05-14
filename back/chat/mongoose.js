@@ -21,7 +21,6 @@ exports.setConnectedUser = function (username, status)  {
             console.log("No user found");
         }
         if (err)  {
-            console.log("ca va pas");
             throw err;
         }
     });

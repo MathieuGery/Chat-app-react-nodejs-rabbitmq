@@ -12,7 +12,6 @@ export default function Chat(props) {
             sendMessageSocket(message, Cookies.get("username"));
             setMessage("");
             e.preventDefault();
-
         }
     }
 

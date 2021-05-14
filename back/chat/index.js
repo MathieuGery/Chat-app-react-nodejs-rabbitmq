@@ -52,9 +52,14 @@ io.use(function(socket, next){
 })
 .on('connection', (socket) => { // socket object may be used to send specific messages to the new connected client
     socket.emit('connection', null);
-    mongoose.setConnectedUser(socket.handshake.query.username, true);
+    try {
+        mongoose.setConnectedUser(socket.handshake.query.username, true);
+    } catch (e) {
+        console.log(e);
+    }
     socket.username = socket.handshake.query.username;
     console.log('New client connected with username: ', socket.username);
+
     //Identify the user
     socket.on('get-messages', username => {
         console.log("Username: ", username)
@@ -175,8 +180,11 @@ io.use(function(socket, next){
     //When user is disconnected
     socket.on('disconnect', () => {
         console.log("User disconnected")
-        mongoose.setConnectedUser(socket.username, false);
-
+        try {
+            mongoose.setConnectedUser(socket.username, false);
+        } catch (e) {
+            console.log(e);
+        }
         STATIC_CHANNELS.forEach(c => {
             let index = c.sockets.indexOf(socket.id);
             if (index != (-1)) {
