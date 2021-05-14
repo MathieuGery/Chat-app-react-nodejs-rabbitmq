@@ -49,16 +49,7 @@ io.use(function (socket, next) {
     } else {
         next(new Error('Authentication error'));
     }
-})
-    .on('connection', (socket) => { // socket object may be used to send specific messages to the new connected client
-        socket.emit('connection', null);
-        mongoose.setConnectedUser(socket.handshake.query.username, true);
-        socket.username = socket.handshake.query.username;
-        console.log('New client connected with username: ', socket.username);
-        //Identify the user
-        socket.on('get-messages', username => {
-            console.log("Username: ", username)
-.on('connection', (socket) => { // socket object may be used to send specific messages to the new connected client
+}).on('connection', (socket) => { // socket object may be used to send specific messages to the new connected client
     socket.emit('connection', null);
     try {
         mongoose.setConnectedUser(socket.handshake.query.username, true);
