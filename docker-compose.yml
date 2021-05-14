@@ -1,0 +1,42 @@
+version: "3"
+services:
+  auth-api:
+    build: ./back/auth
+    environment:
+      - NODE_ENV=prod
+      - APP=MyTelegram
+      - PORT=5000
+      - HOSTNAME=http://localhost:5000
+      - APP_SECRET=longrandomkey
+      - MONGOURI=mongodb://mongo:27017/chatapp
+      - SENDGRID_API_KEY=
+      - FRONTURL=https://my-telegram.gery.me
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongo
+
+  chat-server:
+    build: ./back/chat
+    environment:
+      - MONGOURI=mongodb://mongo:27017/chatapp
+      - RABBITMQURI=amqp://rabbit
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+      - rabbit
+
+  rabbit:
+    image: rabbitmq:3.8.11-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+    ports:
+      - 5672:5672  # rabbit server
+      - 15672:15672 # web ui
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
