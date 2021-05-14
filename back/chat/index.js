@@ -58,125 +58,140 @@ io.use(function (socket, next) {
         //Identify the user
         socket.on('get-messages', username => {
             console.log("Username: ", username)
+.on('connection', (socket) => { // socket object may be used to send specific messages to the new connected client
+    socket.emit('connection', null);
+    try {
+        mongoose.setConnectedUser(socket.handshake.query.username, true);
+    } catch (e) {
+        console.log(e);
+    }
+    socket.username = socket.handshake.query.username;
+    console.log('New client connected with username: ', socket.username);
 
-            //Conexion with rabbitmq to get all messages
-            rabbitConn(function (conn) {
-                conn.createChannel(function (err, ch) {
-                    if (err) {
-                        throw new Error(err)
-                    }
-                    let q = 'chat_q'
-                    ch.assertQueue(q, {durable: true}, function (err, status) {
-                        if (err) {
-                            throw new Error(err)
-                        } else if (status.messageCount === 0) {
-                            io.emit('get-messages', []);
-                        } else {
-                            let numChunks = 0;
-                            let array = []
-                            ch.consume(q.que, function (msg) {
-                                let resChunk = msg.content.toString()
+    //Identify the user
+    socket.on('get-messages', username => {
+        console.log("Username: ", username)
 
-                                array.push(JSON.parse(resChunk))
-                                console.log(JSON.parse(resChunk))
-                                numChunks += 1
-                                if (numChunks === status.messageCount) {
-                                    io.emit('get-messages', array);
-                                    ch.close(function () {
-                                        conn.close()
-                                    })
-                                }
-                            })
-                        }
-                    })
-                }, {noAck: true})
-
-            })
-        })
-
-        //join channel for now it works with socket later it will work with rabbitmq
-        socket.on('channel-join', id => {
-            console.log('channel join', id);
-
-            STATIC_CHANNELS.forEach(c => {
-                if (c.id === id) {
-                    if (c.sockets.indexOf(socket.id) == (-1)) {
-                        c.sockets.push(socket.id);
-                        c.participants++;
-                        io.emit('channel', c);
-                    }
-                } else {
-                    let index = c.sockets.indexOf(socket.id);
-                    if (index != (-1)) {
-                        c.sockets.splice(index, 1);
-                        c.participants--;
-                        io.emit('channel', c);
-                    }
+        //Conexion with rabbitmq to get all messages
+        rabbitConn(function (conn) {
+            conn.createChannel(function (err, ch) {
+                if (err) {
+                    throw new Error(err)
                 }
-            });
-
-            return id;
-        });
-
-        //Send message
-        socket.on('send-message', message => {
-            console.log("New message: ", message);
-
-            //Send message to rabbitmq
-            rabbitConn(function (conn) {
-                conn.createChannel(function (err, ch) {
+                let q = 'chat_q'
+                ch.assertQueue(q, {durable: true}, function (err, status) {
                     if (err) {
                         throw new Error(err)
+                    } else if (status.messageCount === 0) {
+                        io.emit('get-messages', []);
+                    } else {
+                        let numChunks = 0;
+                        let array = []
+                        ch.consume(q.que, function (msg) {
+                            let resChunk = msg.content.toString()
+
+                            array.push(JSON.parse(resChunk))
+                            console.log(JSON.parse(resChunk))
+                            numChunks += 1
+                            if (numChunks === status.messageCount) {
+                                io.emit('get-messages', array);
+                                ch.close(function () {
+                                    conn.close()
+                                })
+                            }
+                        })
                     }
-                    let ex = 'chat_ex'
-                    let q = 'chat_q'
+                })
+            }, {noAck: true})
 
-                    ch.assertExchange(ex, 'fanout', {durable: false})
-                    ch.publish(ex, '', new Buffer(JSON.stringify(message)), {persistent: false})
-                    ch.assertQueue(q, {durable: true})
-                    ch.sendToQueue(q, new Buffer(JSON.stringify(message)), {persistent: true})
-                    ch.assertQueue(q, {durable: true}, function (err, status) {
-                        if (err) {
-                            throw new Error(err)
-                        } else if (status.messageCount === 0) {
-                            io.emit('get-messages', []);
-                        } else {
-                            let numChunks = 0;
-                            let array = []
-                            ch.consume(q.que, function (msg) {
-                                let resChunk = msg.content.toString()
+        })
+    })
 
-                                array.push(JSON.parse(resChunk))
-                                console.log(JSON.parse(resChunk))
-                                numChunks += 1
-                                if (numChunks === status.messageCount) {
-                                    io.emit('get-messages', array);
-                                    ch.close(function () {
-                                        conn.close()
-                                    })
-                                }
-                            })
-                        }
-                    })
-                }, {noAck: true})
-            })
-            //io.emit('get-messages', message);
-        });
+    //join channel for now it works with socket later it will work with rabbitmq
+    socket.on('channel-join', id => {
+        console.log('channel join', id);
 
-        //When user is disconnected
-        socket.on('disconnect', () => {
-            console.log("User disconnected")
-            mongoose.setConnectedUser(socket.username, false);
-
-            STATIC_CHANNELS.forEach(c => {
+        STATIC_CHANNELS.forEach(c => {
+            if (c.id === id) {
+                if (c.sockets.indexOf(socket.id) == (-1)) {
+                    c.sockets.push(socket.id);
+                    c.participants++;
+                    io.emit('channel', c);
+                }
+            } else {
                 let index = c.sockets.indexOf(socket.id);
                 if (index != (-1)) {
                     c.sockets.splice(index, 1);
                     c.participants--;
                     io.emit('channel', c);
                 }
-            });
+            }
         });
 
+        return id;
     });
+
+    //Send message
+    socket.on('send-message', message => {
+        console.log("New message: ", message);
+
+        //Send message to rabbitmq
+        rabbitConn(function (conn) {
+            conn.createChannel(function (err, ch) {
+                if (err) {
+                    throw new Error(err)
+                }
+                let ex = 'chat_ex'
+                let q = 'chat_q'
+
+                ch.assertExchange(ex, 'fanout', {durable: false})
+                ch.publish(ex, '', new Buffer(JSON.stringify(message)), {persistent: false})
+                ch.assertQueue(q, {durable: true})
+                ch.sendToQueue(q, new Buffer(JSON.stringify(message)), {persistent: true})
+                ch.assertQueue(q, {durable: true}, function (err, status) {
+                    if (err) {
+                        throw new Error(err)
+                    } else if (status.messageCount === 0) {
+                        io.emit('get-messages', []);
+                    } else {
+                        let numChunks = 0;
+                        let array = []
+                        ch.consume(q.que, function (msg) {
+                            let resChunk = msg.content.toString()
+
+                            array.push(JSON.parse(resChunk))
+                            console.log(JSON.parse(resChunk))
+                            numChunks += 1
+                            if (numChunks === status.messageCount) {
+                                io.emit('get-messages', array);
+                                ch.close(function () {
+                                    conn.close()
+                                })
+                            }
+                        })
+                    }
+                })
+            }, {noAck: true})
+        })
+        //io.emit('get-messages', message);
+    });
+
+    //When user is disconnected
+    socket.on('disconnect', () => {
+        console.log("User disconnected")
+        try {
+            mongoose.setConnectedUser(socket.username, false);
+        } catch (e) {
+            console.log(e);
+        }
+        STATIC_CHANNELS.forEach(c => {
+            let index = c.sockets.indexOf(socket.id);
+            if (index != (-1)) {
+                c.sockets.splice(index, 1);
+                c.participants--;
+                io.emit('channel', c);
+            }
+        });
+    })
+});
 
