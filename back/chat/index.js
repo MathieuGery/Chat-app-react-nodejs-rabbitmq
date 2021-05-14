@@ -59,7 +59,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
                         throw new Error(err)
                     }
                     else if (status.messageCount === 0) {
-                        io.emit('message', '{"messages": 0}');
+                        io.emit('list_messages', '{"messages": "no message"}');
                     } else {
                         let numChunks = 0;
                         let array = []
@@ -70,7 +70,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
                             console.log(JSON.parse(resChunk))
                             numChunks += 1
                             if (numChunks === status.messageCount) {
-                                io.emit('message', array);
+                                io.emit('list_messages', array);
                                 ch.close(function() {conn.close()})
                             }
                         })
@@ -125,7 +125,39 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
                 ch.close(function() {conn.close()})
             })
         })
-        io.emit('message', message);
+
+        rabbitConn(function(conn){
+            conn.createChannel(function(err, ch) {
+                if (err) {
+                    throw new Error(err)
+                }
+                var q = 'chat_q'
+                ch.assertQueue(q, {durable: true}, function(err, status) {
+                    if (err) {
+                        throw new Error(err)
+                    }
+                    else if (status.messageCount === 0) {
+                        io.emit('list_messages', '{"messages": "no message"}');
+                    } else {
+                        let numChunks = 0;
+                        let array = []
+                        ch.consume(q.que, function(msg) {
+                            let resChunk = msg.content.toString()
+
+                            array.push(JSON.parse(resChunk))
+                            console.log(JSON.parse(resChunk))
+                            numChunks += 1
+                            if (numChunks === status.messageCount) {
+                                io.emit('list_messages', array);
+                                ch.close(function() {conn.close()})
+                            }
+                        })
+                    }
+                })
+            }, {noAck: true})
+
+    })
+        //io.emit('list_messages', message);
     });
 
     //When user is disconnected

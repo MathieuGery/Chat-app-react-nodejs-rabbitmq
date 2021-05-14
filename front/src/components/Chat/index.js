@@ -1,18 +1,24 @@
-import {useState} from "react";
-import {sendMessageSocket} from "../../helpers/socket";
+import {useState, useEffect} from "react";
+import {getChatMessageSocket, identifyUserChatSocket, sendMessageSocket} from "../../helpers/socket";
 import Message from "./Message";
 import Cookies from "js-cookie";
 
 export default function Chat(props) {
     const [message, setMessage] = useState("");
+    const [allMessages, setAllMessages] = useState([{message: "toto"}]);
 
     const sendMessage = (e) => {
         if (message !== "") {
             sendMessageSocket(message, Cookies.get("username"));
             setMessage("");
             e.preventDefault();
+
         }
     }
+
+    useEffect(() => {
+        getChatMessageSocket(setAllMessages)
+    }, [allMessages]);
 
     return (
         <div className="flex flex-col w-full">
@@ -20,11 +26,9 @@ export default function Chat(props) {
                 <p>Room ID: {props.roomId}</p>
             </div>
             <div className="flex flex-col overflow-y-auto">
-                <Message sent text={"Salut !"}/>
-                <Message text={"Salut ! Ça va ?"}/>
-                <Message sent text={"Bah ouais, niquel et toi ?"}/>
-                <Message text={"Ouais bah tranquille la routine tu connais"}/>
-                <Message sent text={"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur error est eveniet impedit labore laboriosam modi molestiae. Aliquid blanditiis eius et itaque, laboriosam molestiae nulla optio pariatur ut veritatis voluptates?"}/>
+                {allMessages.map((message, index) => (
+                    <Message key={index} sent text={message.message}/>
+                ))}
             </div>
             <form noValidate onSubmit={(e) => {sendMessage(e)}}>
                 <div className="absolute inset-x-0 bottom-0 flex flex-row m-2">
