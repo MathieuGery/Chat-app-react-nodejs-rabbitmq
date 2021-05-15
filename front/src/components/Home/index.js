@@ -52,7 +52,7 @@ function Home() {
                         </section>
 
                         <aside className="hidden lg:block lg:flex-shrink-0 flex-1">
-                            <div className="h-full relative flex flex-col border-r border-gray-200 bg-white">
+                            <div className="h-full relative flex flex-col border-l-2 border-solid border-black border-r border-gray-200 bg-white">
                                 <Chat roomId={roomId}/>
                             </div>
                         </aside>
