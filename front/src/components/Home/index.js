@@ -12,7 +12,6 @@ function Home() {
     // const [message, setMessage] = useState("'");
     const [roomId, setRoomId] = useState("'");
 
-
     useEffect(() => {
         //getChatMessageSocket(setMessage)
         // identifyUserChatSocket("test")

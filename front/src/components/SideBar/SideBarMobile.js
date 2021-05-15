@@ -2,8 +2,11 @@ import {Transition} from "@tailwindui/react";
 import React from 'react';
 import Modal from "../utils/Modal";
 import Logo from "../utils/Logo";
+import { useHistory } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function SideBarMobile(props) {
+    let history = useHistory();
     const [showModal, setShowModal] = React.useState(false);
 
     const openModal = () => {
@@ -12,6 +15,12 @@ function SideBarMobile(props) {
 
     const closeModal = () => {
         setShowModal(false);
+    }
+
+    const logout = () => {
+        Cookies.remove('jwt');
+        Cookies.remove('username');
+        history.push('/');
     }
 
     return (
@@ -45,7 +54,7 @@ function SideBarMobile(props) {
                             <div className="flex-shrink-0 flex items-center px-4">
                                 <Logo/>
                             </div>
-                            <nav aria-label="Sidebar" className="mt-5">
+                            <nav aria-label="Sidebar" className="mt-5 justify-between h-full">
                                 <div className="px-2 space-y-1">
                                     <button className="btn flex items-center p-4 rounded-lg text-indigo-200 hover:bg-indigo-700" onClick={() => {openModal()}}>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,27 +63,25 @@ function SideBarMobile(props) {
                                         <span className="sr-only">New message</span>
                                     </button>
 
-                                    <button className="btn flex items-center p-4 rounded-lg text-indigo-200 hover:bg-indigo-700">
-                                        <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    <button className="btn flex items-center p-4 rounded-lg text-indigo-200 hover:bg-indigo-700" onClick={() => {logout()}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                         </svg>
-                                        <span className="sr-only">Profile</span>
+                                        <span className="sr-only">Logout</span>
                                     </button>
                                 </div>
                             </nav>
                         </div>
                         <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
-                            <button className="btn flex-shrink-0 group block">
-                                <div className="flex items-center">
-                                    <div>
-                                        <img className="inline-block h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80" alt=""/>
-                                    </div>
-                                    <div className="ml-3">
-                                        <p className="text-base font-medium text-gray-700 group-hover:text-gray-900">Lisa Marie</p>
-                                        <p className="text-sm font-medium text-gray-500 group-hover:text-gray-700">Account Settings</p>
-                                    </div>
+                            <div className="flex items-center">
+                                <div>
+                                    <img className="inline-block h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80" alt=""/>
                                 </div>
-                            </button>
+                                <div className="ml-3">
+                                    <p className="text-base font-medium text-gray-700 group-hover:text-gray-900">Lisa Marie</p>
+                                    <p className="text-sm font-medium text-gray-500 group-hover:text-gray-700">Account Settings</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="flex-shrink-0 w-14" aria-hidden="true">
