@@ -51,8 +51,10 @@ exports.recoverPasswordFinal = async (req, res, next) => {
     if (!req.query.key || !req.body.password) return res.status(httpStatus.BAD_REQUEST)
     const user = await User.findAndRecoverPasswordFinal({activationKey: req.query.key})
     const newPasswordHash = bcrypt.hashSync(req.body.password)
-    user.password = newPasswordHash;
-    user.save()
+    await User.findOneAndUpdate(
+        { 'activationKey': req.query.key },
+        { $set: { 'password': newPasswordHash, 'activationKey': '' } }
+    )
     mailSender.mailConfirmNewPassword(next, user.email)
     return res.json({ message: 'Your password has been successfully reset' })
   } catch (error) {
