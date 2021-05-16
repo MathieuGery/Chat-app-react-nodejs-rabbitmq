@@ -40,7 +40,11 @@ const mailConfirmNewPassword = (next, email) => {
     return sendMail(next, email, 'MyTelegram new password as been set', 'Click here to see infos', `<div><h1>Hello user!</h1><p>Your password as been successfully reset</p></div>`)
 };
 
+const mailRoomRequest = (next, email, username, roomName) => {
+    return sendMail(next, email, 'MyTelegram room invitation', 'Click here to see infos', `<div><h1>Hello user!</h1><p>User ${username} add you to a new room: ${roomName} you can accept or decline</p></div>`)
+};
 exports.mailCreateAccount = mailCreateAccount;
 exports.mailLogin = mailLogin;
 exports.mailRecover = mailRecover;
 exports.mailConfirmNewPassword = mailConfirmNewPassword;
+exports.mailRoomRequest = mailRoomRequest;

@@ -30,6 +30,7 @@ exports.editRoom = async (req, res, next) => {
     try {
         if (!req.query.name) return res.status(httpStatus.BAD_REQUEST)
         const room = await Room.editRoom(req.body, req.query.name)
+        await Room.sendInvites(req.body, req.query.name)
         res.send(room)
     } catch (error) {
         console.log(error)
