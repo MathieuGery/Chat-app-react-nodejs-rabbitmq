@@ -1,12 +1,52 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useParams} from "react-router-dom";
+import recoverPassword from "../../requests/Auth/recoverPassword";
+import Cookies from "js-cookie";
+import handleAxiosResponseError from "../../helpers/handleAxiosResponseError";
+import SuccessAlert from "../Alerts/SuccessAlert";
+import WarningAlert from "../Alerts/WarningAlert";
+import ErrorAlert from "../Alerts/ErrorAlert";
 
 function RecoverPassword() {
     const {key} = useParams();
+    const [password, setPassword] = useState("");
+    const [cpPassword, setCpPassword] = useState("");
+    const [alertMessage, setAlertMessage] = useState({})
     console.log(key);
+
+    const callRecoverPasswordRequest = (event) => {
+        setAlertMessage({});
+        recoverPassword(key.slice(5), password, cpPassword).then((response) => {
+            if (response.success) {
+                setAlertMessage({success: "Your password has been updated !"})
+                setTimeout(() => {
+                }, 500);
+            }
+            else if (response.warning)
+                setAlertMessage({warning: response.warning})
+        }).catch((error) => {
+            setAlertMessage({error: handleAxiosResponseError(error)})
+        });
+        event.preventDefault();
+    }
+
+    function buildAlert() {
+        if (alertMessage.success) {
+            return (<SuccessAlert title={"Success !"}>{alertMessage.success}</SuccessAlert>)
+        } else if (alertMessage.warning) {
+            return (<WarningAlert title={"Warning !"}>{alertMessage.warning}</WarningAlert>)
+        } else if (alertMessage.error) {
+            return (<ErrorAlert title={"Error !"}>{alertMessage.error}</ErrorAlert>)
+        }
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+            {(alertMessage.success || alertMessage.warning || alertMessage.error) &&
+            <div className="mb-6">
+                {buildAlert()}
+            </div>
+            }
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-auto stroke-current text-indigo-500" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">
@@ -20,13 +60,14 @@ function RecoverPassword() {
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" onSubmit={(e) => callRecoverPasswordRequest(e)}>
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                                 New password
                             </label>
                             <div className="mt-1">
-                                <input id="password" name="password" type="password" autoComplete="password" required
+                                <input id="password" name="password" type="password" autoComplete="password" value={password}
+                                       onChange={(event => setPassword(event.target.value))} required
                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
                             </div>
                         </div>
@@ -35,7 +76,8 @@ function RecoverPassword() {
                                 Repeat password
                             </label>
                             <div className="mt-1">
-                                <input id="repeat_password" name="repeat_password" type="repeat_password" autoComplete="repeat_password" required
+                                <input id="repeat_password" name="repeat_password" type="repeat_password" autoComplete="repeat_password" value={cpPassword}
+                                       onChange={(event => setCpPassword(event.target.value))} required
                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
                             </div>
                         </div>

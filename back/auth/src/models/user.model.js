@@ -64,6 +64,8 @@ userSchema.pre('save', async function save (next) {
 })
 
 userSchema.post('save', async function saved (doc, next) {
+  if (this.active)
+    return
   return mailSender.mailCreateAccount(next, this.email, this.activationKey);
 })
 

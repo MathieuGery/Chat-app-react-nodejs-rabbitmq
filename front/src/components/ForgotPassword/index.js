@@ -1,8 +1,49 @@
-import React from 'react';
+import React, {useState} from 'react';
+import forgotPassword from "../../requests/Auth/forgotPassword";
+import SuccessAlert from "../Alerts/SuccessAlert";
+import WarningAlert from "../Alerts/WarningAlert";
+import ErrorAlert from "../Alerts/ErrorAlert";
+import handleAxiosResponseError from "../../helpers/handleAxiosResponseError";
 
 function ForgotPassword() {
+    const [email, setEmail] = useState("")
+    const [alertMessage, setAlertMessage] = useState({})
+
+    const callForgotPasswordRequest = (event) => {
+        setAlertMessage({});
+        forgotPassword(email).then((response) => {
+            if (response.success) {
+                setAlertMessage({success: "An email as been sent !"})
+                setTimeout(() => {
+                }, 500);
+            }
+            else if (response.warning)
+                setAlertMessage({warning: response.warning})
+        }).catch((error) => {
+            setAlertMessage({error: handleAxiosResponseError(error)})
+        });
+        event.preventDefault();
+    }
+
+
+    function buildAlert() {
+        if (alertMessage.success) {
+            return (<SuccessAlert title={"Success !"}>{alertMessage.success}</SuccessAlert>)
+        } else if (alertMessage.warning) {
+            return (<WarningAlert title={"Warning !"}>{alertMessage.warning}</WarningAlert>)
+        } else if (alertMessage.error) {
+            return (<ErrorAlert title={"Error !"}>{alertMessage.error}</ErrorAlert>)
+        }
+    }
+
+
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+            {(alertMessage.success || alertMessage.warning || alertMessage.error) &&
+            <div className="mb-6">
+                {buildAlert()}
+            </div>
+            }
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-auto stroke-current text-indigo-500" fill="none" viewBox="0 0 24 24"
                      stroke="currentColor">
@@ -14,15 +55,17 @@ function ForgotPassword() {
                 </h2>
             </div>
 
+
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" onSubmit={(e) => callForgotPasswordRequest(e)}>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                 Email address
                             </label>
                             <div className="mt-1">
-                                <input id="email" name="email" type="email" autoComplete="email" required
+                                <input id="email" name="email" type="email" autoComplete="email" value={email}
+                                       onChange={(event => setEmail(event.target.value))} required
                                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
                             </div>
                         </div>
