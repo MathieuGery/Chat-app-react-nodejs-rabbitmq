@@ -7,10 +7,10 @@ export default function Modal(props) {
         <>
             {props.show ? (
                 <>
-                    <div className="justify-center items-center overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none">
-                        <div className="relative w-auto my-6 mx-auto max-w-2xl">
+                    <div className="justify-center w-screen h-screen items-center overflow-x-hidden fixed inset-0 z-50 outline-none focus:outline-none">
+                        <div className="relative w-auto mx-auto pt-28 max-w-2xl">
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                <div className="flex h-20 items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                                     <h3 className="text-xl">Envoyer un nouveau message</h3>
                                     <button className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onClick={() => props.close()}>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -18,7 +18,7 @@ export default function Modal(props) {
                                         </svg>
                                     </button>
                                 </div>
-                                <div className="relative px-6 overflow-y-auto">
+                                <div className="relative overflow-y-scroll px-6" style={{height: '600px'}}>
                                     <UsersList/>
                                 </div>
                             </div>

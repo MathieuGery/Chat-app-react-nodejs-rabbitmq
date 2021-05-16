@@ -17,21 +17,11 @@ export default function Chat(props) {
     }
 
     useEffect(() => {
-        // getChatMessageSocket(setAllMessages)
-        const token = Cookies.get("jwt");
-        const username = Cookies.get("username");
-        const socket = socketIOClient(process.env.REACT_APP_CHAT_SERVER_URL, {
-            query: {token, username}
-        });
-        identifyUserChatSocket(username);
-        socket.on("get-messages", messages => {
-            console.log('ok');
-            setAllMessages(messages)
-        });
+        identifyUserChatSocket();
+        getChatMessageSocket(setAllMessages)
     }, []);
 
     const buildMessageList = () => {
-        console.log(allMessages);
         if (allMessages.length === 0) {
             return <div className="w-full text-center mt-6 text-gray-500">No messages</div>
         }
@@ -48,6 +38,9 @@ export default function Chat(props) {
             <div className="flex flex-col overflow-y-auto">
                 {buildMessageList()}
             </div>
+            <button onClick={(e) => {identifyUserChatSocket(e)}} type="button" className="inline-flex items-center px-3 py-1.5 ml-4 border border-transparent shadow-sm text-sm leading-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                send get-messages signal
+            </button>
             <form noValidate onSubmit={(e) => {sendMessage(e)}}>
                 <div className="absolute inset-x-0 bottom-0 flex flex-row m-2">
                     <input type="text" name="message" id="message" placeholder="Type your message"
