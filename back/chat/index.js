@@ -49,5 +49,5 @@ io.use((socket, next) => {
 
     socket.on('get-messages', () => {getMessages(io, queue)});
     socket.on('send-message', message => sendMessage(exchange, message));
-    socket.on('disconnect', () => disconnect(socket.username,));
+    socket.on('disconnect', () => disconnect(socket.username));
 });
