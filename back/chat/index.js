@@ -65,35 +65,72 @@ io.use(function (socket, next) {
 
         //Conexion with rabbitmq to get all messages
         rabbitConn(function (conn) {
-            conn.createChannel(function (err, ch) {
-                if (err) {
-                    throw new Error(err)
+            conn.createChannel(function (error1, channel) {
+                if (error1) {
+                    throw error1;
                 }
-                let q = 'chat_q'
-                ch.assertQueue(q, {durable: true}, function (err, status) {
-                    if (err) {
-                        throw new Error(err)
-                    } else if (status.messageCount === 0) {
-                        io.emit('get-messages', []);
-                    } else {
-                        let numChunks = 0;
-                        let array = []
-                        ch.consume(q.que, function (msg) {
-                            let resChunk = msg.content.toString()
+                let ex = 'chat_ex'
 
+                channel.assertExchange(ex, 'fanout', {
+                    durable: true
+                });
+                channel.assertQueue('chat_q', {
+                    exclusive: false,
+                }, function (error2, q) {
+                    if (error2) {
+                        throw error2;
+                    }
+                    channel.bindQueue('chat_q', ex, '');
+                    let numChunks = 0;
+                    let array = []
+                    channel.consume('chat_q', function (msg) {
+                        if (msg.content) {
+                            let resChunk = msg.content.toString()
                             array.push(JSON.parse(resChunk))
-                            console.log(JSON.parse(resChunk))
-                            numChunks += 1
-                            if (numChunks === status.messageCount) {
+                            numChunks += 1;
+                            console.log(q.messageCount)
+                            if (numChunks === q.messageCount) {
+                                console.log(array);
                                 io.emit('get-messages', array);
-                                ch.close(function () {
+                                channel.close(function () {
                                     conn.close()
                                 })
                             }
-                        })
-                    }
-                })
-            }, {noAck: true})
+                        }
+                    }, {
+                        noAck: false
+                    });
+                });
+            });
+            // conn.createChannel(function (err, ch) {
+            //     if (err) {
+            //         throw new Error(err)
+            //     }
+            //     let q = 'chat_q'
+            //     ch.assertQueue(q, {durable: true}, function (err, status) {
+            //         if (err) {
+            //             throw new Error(err)
+            //         } else if (status.messageCount === 0) {
+            //             io.emit('get-messages', []);
+            //         } else {
+            //             let numChunks = 0;
+            //             let array = []
+            //             ch.consume(q.que, function (msg) {
+            //                 let resChunk = msg.content.toString()
+            //
+            //                 array.push(JSON.parse(resChunk))
+            //                 console.log(JSON.parse(resChunk))
+            //                 numChunks += 1
+            //                 if (numChunks === status.messageCount) {
+            //                     io.emit('get-messages', array);
+            //                     ch.close(function () {
+            //                         conn.close()
+            //                     })
+            //                 }
+            //             })
+            //         }
+            //     })
+            // }, {noAck: true})
 
         })
     })
@@ -124,8 +161,6 @@ io.use(function (socket, next) {
 
     //Send message
     socket.on('send-message', message => {
-        console.log("New message: ", message);
-
         //Send message to rabbitmq
         rabbitConn(function (conn) {
             conn.createChannel(function (err, ch) {
@@ -133,56 +168,58 @@ io.use(function (socket, next) {
                     throw new Error(err)
                 }
                 let ex = 'chat_ex'
-                let q = 'chat_q'
+                // let q = 'chat_q'
 
-                ch.assertExchange(ex, 'fanout', {durable: false})
-                ch.publish(ex, '', new Buffer(JSON.stringify(message)), {persistent: false})
-                ch.assertQueue(q, {durable: true})
-                ch.sendToQueue(q, new Buffer(JSON.stringify(message)), {persistent: true})
-                ch.assertQueue(q, {durable: true}, function (err, status) {
-                    if (err) {
-                        throw new Error(err)
-                    } else if (status.messageCount === 0) {
-                        io.emit('get-messages', []);
-                    } else {
-                        let numChunks = 0;
-                        let array = []
-                        ch.consume(q.que, function (msg) {
-                            let resChunk = msg.content.toString()
-
-                            array.push(JSON.parse(resChunk))
-                            console.log(JSON.parse(resChunk))
-                            numChunks += 1
-                            if (numChunks === status.messageCount) {
-                                io.emit('get-messages', array);
-                                ch.close(function () {
-                                    conn.close()
-                                })
-                            }
-                        })
-                    }
-                })
-            }, {noAck: true})
-        })
-        //io.emit('get-messages', message);
-    });
-
-    //When user is disconnected
-    socket.on('disconnect', () => {
-        console.log("User disconnected")
-        try {
-            mongoose.setConnectedUser(socket.username, false);
-        } catch (e) {
-            console.log(e);
-        }
-        STATIC_CHANNELS.forEach(c => {
-            let index = c.sockets.indexOf(socket.id);
-            if (index != (-1)) {
-                c.sockets.splice(index, 1);
-                c.participants--;
-                io.emit('channel', c);
-            }
+                ch.assertExchange(ex, 'fanout', {durable: true})
+                ch.publish(ex, '', Buffer.from(JSON.stringify(message)))
+                // ch.assertQueue(q, {durable: true})
+                // ch.sendToQueue(q, new Buffer(JSON.stringify(message)), {persistent: true})
+                //     ch.assertQueue(q, {durable: true}, function (err, status) {
+                //         if (err) {
+                //             throw new Error(err)
+                //         } else if (status.messageCount === 0) {
+                //             io.emit('get-messages', []);
+                //         } else {
+                //             let numChunks = 0;
+                //             let array = []
+                //             ch.consume(q.que, function (msg) {
+                //                 let resChunk = msg.content.toString()
+                //
+                //                 array.push(JSON.parse(resChunk))
+                //                 console.log(JSON.parse(resChunk))
+                //                 numChunks += 1
+                //                 if (numChunks === status.messageCount) {
+                //                     io.emit('get-messages', array);
+                //                     ch.close(function () {
+                //                         conn.close()
+                //                     })
+                //                 }
+                //             })
+                //         }
+                //     })
+                // }, {noAck: true})
+            })
+            //io.emit('get-messages', message);
         });
+
+        //When user is disconnected
+        socket.on('disconnect', () => {
+            console.log("User disconnected")
+            try {
+                mongoose.setConnectedUser(socket.username, false);
+            } catch (e) {
+                console.log(e);
+            }
+            STATIC_CHANNELS.forEach(c => {
+                let index = c.sockets.indexOf(socket.id);
+                if (index != (-1)) {
+                    c.sockets.splice(index, 1);
+                    c.participants--;
+                    io.emit('channel', c);
+                }
+            });
+        })
     })
 });
+
 
