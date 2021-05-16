@@ -9,6 +9,7 @@ const socket = socketIOClient(process.env.REACT_APP_CHAT_SERVER_URL, {
 
 function getChatMessageSocket(setMessages) {
     socket.on("get-messages", messages => {
+        console.log("J'ai un message");
         console.log(messages);
         setMessages(messages)
     });
@@ -19,9 +20,8 @@ function sendMessageSocket(message, username) {
     socket.emit("send-message", {message: message, username: username});
 }
 
-function identifyUserChatSocket(username) {
-    if (!username) return
-    socket.emit("get-messages", username);
+function identifyUserChatSocket() {
+    socket.emit("get-messages");
 }
 
 export { getChatMessageSocket, sendMessageSocket, identifyUserChatSocket}
