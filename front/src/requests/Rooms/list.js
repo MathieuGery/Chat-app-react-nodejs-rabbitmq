@@ -6,9 +6,10 @@ import Cookies from "js-cookie";
 export default async function listRooms() {
     let config = setAxiosConfig('GET', LIST_ROOMS, false);
     let token = Cookies.get('jwt');
-    config['data'] = {
-        'username': Cookies.get('email')
-    }
+
+    config['params'] = {
+        'username': Cookies.get('email'),
+    };
     config['headers']['Authorization'] = `Bearer ${token}`;
     return await axios(config).then((response) => {
         if (response.status === 200) {
