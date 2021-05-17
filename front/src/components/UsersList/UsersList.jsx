@@ -1,30 +1,16 @@
 import React, {useEffect, useState} from 'react';
+import listUsers from "../../requests/Auth/listUsers";
 
-export default function UsersList(props) {
+export default function UsersList() {
     const [usersList, setUsersList] = useState([])
 
     useEffect(() => {
-        /*
+
             listUsers().then((response) => {
                 if (response.success) {
                     setUsersList(response.success.users);
                 }
-            }).catch((error) => {});
-        */
-        setUsersList([{name: "Roberto", email: "roberto.tadaronne@gmail.com"}, {
-            name: "Gilbert",
-            email: "gilbert.lechauve@outlook.fr"
-        },
-            {name: "Andréane", email: "andreane.responsive@epitech.eu"},
-            {name: "Andréane", email: "andreane.responsive@epitech.eu"},
-            {name: "Andréane", email: "andreane.responsive@epitech.eu"},
-            {name: "Andréane", email: "andreane.responsive@epitech.eu"},
-            {name: "Andréane", email: "andreane.responsive@epitech.eu"},
-            {name: "Andréane", email: "andreane.responsive@epitech.eu"},
-            {
-            name: "Sophie",
-            email: "hakunamatata@gmail.com"
-        }, {name: "Fabrice", email: "fabriceaimeleshit@free.fr"}]);
+            }).catch(() => {});
     }, []);
 
     const newMessage = () => {
