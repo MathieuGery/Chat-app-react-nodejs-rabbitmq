@@ -48,7 +48,7 @@ io.use((socket, next) => {
     // bind the queue to the exchange (if it wasn't already done)
     await exchange.bind(queue)
 
-    socket.on('get-messages', () => {getMessages(io, queue)});
+    socket.on('get-messages', data => {getMessages(io, broker, socket.username, data)});
     socket.on('join-room', roomName => {joinRoom(broker, roomName, socket.username)});
     socket.on('send-message', message => sendMessage(broker, message));
     socket.on('disconnect', () => disconnect(socket.username));

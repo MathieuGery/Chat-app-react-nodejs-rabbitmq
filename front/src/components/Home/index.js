@@ -10,7 +10,7 @@ import Logo from "../utils/Logo";
 function Home() {
     const [isOpen, setIsOpen] = useState(false);
     // const [message, setMessage] = useState("'");
-    const [roomId, setRoomId] = useState("'");
+    const [roomId, setRoomId] = useState("general");
 
     useEffect(() => {
         //getChatMessageSocket(setMessage)

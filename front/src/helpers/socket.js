@@ -20,8 +20,8 @@ function sendMessageSocket(message, username, roomName) {
     socket.emit("send-message", {message: message, username: username, roomName: roomName});
 }
 
-function identifyUserChatSocket() {
-    socket.emit("get-messages");
+function identifyUserChatSocket(roomName) {
+    socket.emit("get-messages", {roomName: roomName});
 }
 
 function joinRoomChatSocket(roomName) {

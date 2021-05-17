@@ -16,7 +16,7 @@ export default function Chat(props) {
     }
 
     useEffect(() => {
-        identifyUserChatSocket();
+        identifyUserChatSocket(props.roomId);
         getChatMessageSocket(setAllMessages)
     }, []);
 
