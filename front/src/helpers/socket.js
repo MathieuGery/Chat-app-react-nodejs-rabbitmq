@@ -7,11 +7,10 @@ const socket = socketIOClient(process.env.REACT_APP_CHAT_SERVER_URL, {
     query: {token, username}
 });
 
-function getChatMessageSocket(setMessages) {
+function getChatMessageSocket(setMessages, messagesContainerRef) {
     socket.on("get-messages", messages => {
-        console.log("J'ai un message");
-        console.log(messages);
         setMessages(messages)
+        messagesContainerRef.current?.scrollIntoView({ behavior: "smooth" })
     });
 }
 
