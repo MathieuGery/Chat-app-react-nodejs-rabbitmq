@@ -26,7 +26,7 @@ export default function Chat(props) {
             return <div className="w-full text-center mt-6 text-gray-500">No messages</div>
         }
         return allMessages?.map((message, index) => {
-            return <Message key={index} sent={message.username === Cookies.get("username")} text={message.message}/>
+            return <Message key={index} sent={message.username === Cookies.get("username")} name={message.username} text={message.message}/>
         })
     };
 
