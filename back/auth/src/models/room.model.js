@@ -19,6 +19,10 @@ const roomSchema = new Schema({
     members: {
         type: Array,
         required: false
+    },
+    messages: {
+        type: Array,
+        required: false
     }
 }, {
     timestamps: true
@@ -27,7 +31,7 @@ const roomSchema = new Schema({
 roomSchema.method({
     transform () {
         const transformed = {}
-        const fields = ['creator', 'name', 'createdAt', 'members']
+        const fields = ['creator', 'name', 'createdAt', 'members', 'messages']
 
         fields.forEach((field) => {
             transformed[field] = this[field]
@@ -40,7 +44,7 @@ roomSchema.method({
 roomSchema.statics = {
     checkDuplicateRoomError (err) {
         if (err.code === 11000) {
-            var error = new Error('Room already taken')
+            let error = new Error('Room already taken')
             error.errors = [{
                 field: 'name',
                 location: 'body',
@@ -91,16 +95,27 @@ roomSchema.statics = {
                 i++;
             }
         }
+
     },
 
     async editRoom (payload, roomName) {
-        const { creator, name, members } = payload
+        const { creator, name, members} = payload
         const update = { creator: creator, name: name, members: members}
-        if (!name) throw new APIError('Room name must be provided')
 
-        return await this.findOneAndUpdate({name: roomName}, {$set: update}, {upsert: true, new: true}, function (err, res) {
+        for(let prop in update) if(!update[prop]) delete update[prop];
+        if (!roomName) throw new APIError('Room name must be provided')
+
+        return await this.findOneAndUpdate({name: roomName}, {$set: update}, {upsert: false, new: true}, function (err, res) {
+            console.log(res)
             const error = new Error('Room already taken')
             if (!res) {
+                console.log("toto")
+                error.errors = [{
+                    field: 'name',
+                    location: 'body',
+                    messages: ['Room already taken']
+                }]
+                error.status = httpStatus.CONFLICT
                 return error
             }
             if (err) {
