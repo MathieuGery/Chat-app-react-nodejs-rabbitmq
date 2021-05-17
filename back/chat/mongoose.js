@@ -30,7 +30,6 @@ exports.setConnectedUser = function (username, status)  {
 }
 
 exports.addNewMessages = function (message, roomName)  {
-    console.log(message)
     rooms_db?.findOneAndUpdate({name: roomName}, {$push: {messages: message}}, function (err, res) {
         if (!res.value) {
             console.log("No Room found");
