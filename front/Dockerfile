@@ -3,7 +3,7 @@ FROM node:12.16.1-alpine3.9 as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 ENV REACT_APP_CHAT_SERVER_URL=http://localhost:8080
-ENV REACT_APP_AUTH_API_URL=http://localhost:5000
+ENV REACT_APP_AUTH_API_URL=http://localhost:5000/api
 COPY ./package.json /app/
 RUN npm install
 COPY . /app
