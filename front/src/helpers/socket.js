@@ -24,4 +24,8 @@ function identifyUserChatSocket() {
     socket.emit("get-messages");
 }
 
-export { getChatMessageSocket, sendMessageSocket, identifyUserChatSocket}
+function joinRoomChatSocket(roomName) {
+    socket.emit("join-room", {roomName: roomName});
+}
+
+export { getChatMessageSocket, sendMessageSocket, identifyUserChatSocket, joinRoomChatSocket}

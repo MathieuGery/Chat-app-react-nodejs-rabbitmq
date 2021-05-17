@@ -2,7 +2,6 @@ import {useState, useEffect} from "react";
 import {getChatMessageSocket, identifyUserChatSocket, sendMessageSocket} from "../../helpers/socket";
 import Message from "./Message";
 import Cookies from "js-cookie";
-import socketIOClient from "socket.io-client";
 
 export default function Chat(props) {
     const [message, setMessage] = useState("");

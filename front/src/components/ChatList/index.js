@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import listRooms from "../../requests/Rooms/list";
+import {joinRoomChatSocket} from "../../helpers/socket";
 
 function ChatList(props) {
     const [roomsList, setRoomsList] = useState([])
@@ -16,6 +17,8 @@ function ChatList(props) {
 
     const changeRoom = (roomID) => {
         props.setRoomId(roomID);
+        joinRoomChatSocket(roomID);
+
     }
 
     return (
@@ -24,7 +27,7 @@ function ChatList(props) {
                 {roomsList.map((room, index) => (
                     <li key={index} className="px-6 py-5 relative">
                         <div className="group flex justify-between items-center">
-                            <a href="#" className="-m-1 p-1 block" onClick={() => {changeRoom(room._id)}}>
+                            <a href="#" className="-m-1 p-1 block" onClick={() => {changeRoom(room.name)}}>
                                 <div className="absolute inset-0 group-hover:bg-gray-50" aria-hidden="true"/>
                                 <div className="flex-1 flex items-center min-w-0 relative">
                                     <span className="flex-shrink-0 inline-block relative">

@@ -3,6 +3,7 @@ const connection = require("./src/connection");
 const getMessages = require("./src/getMessages");
 const sendMessage = require("./src/sendMessage");
 const disconnect = require("./src/disconnect");
+const joinRoom = require("./src/joinRoom")
 
 let app = require('express')();
 require('dotenv').config()
@@ -48,6 +49,7 @@ io.use((socket, next) => {
     await exchange.bind(queue)
 
     socket.on('get-messages', () => {getMessages(io, queue)});
+    socket.on('join-room', roomName => {joinRoom(broker, roomName, socket.username)});
     socket.on('send-message', message => sendMessage(exchange, message));
     socket.on('disconnect', () => disconnect(socket.username));
 });
