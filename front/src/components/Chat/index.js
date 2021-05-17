@@ -24,7 +24,7 @@ export default function Chat(props) {
 
     const buildMessageList = () => {
         if (allMessages.length === 0) {
-            return <div className="w-full text-center mt-6 text-gray-500">No messages</div>
+            return <div className="w-full text-center mt-6 text-gray-500">No message</div>
         }
         return allMessages?.map((message, index) => {
             return <Message key={index} sent={message.username === Cookies.get("username")} name={message.username} text={message.message}/>
