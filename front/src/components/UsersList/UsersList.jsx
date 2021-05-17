@@ -17,6 +17,13 @@ export default function UsersList() {
         console.log("nouveau message");
     }
 
+    const buildStatus = (status) => {
+        if (status) {
+            return  <span className=" bg-green-400 absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white" aria-hidden="true"/>
+        } else {
+            return <span className=" bg-red-400 absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white" aria-hidden="true"/>
+        }
+    }
     return (
         <div>
             <ul>
@@ -26,7 +33,7 @@ export default function UsersList() {
                             <div>
                                 <span className="flex-shrink-0 inline-block relative">
                                     <img className="h-10 w-10 rounded-full" src='https://picsum.photos/200/300' alt=""/>
-                                    <span className="bg-green-400 absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white" aria-hidden="true"/>
+                                    {buildStatus(user.connected)}
                                 </span>
                             </div>
                             <div className="flex flex-col ml-4">
