@@ -1,0 +1,18 @@
+name: "[Front] - Publish Docker front"
+on:
+ push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: MathieuGery/MyTelegram/front
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+          registry: docker.pkg.github.com
+          workdir: front
