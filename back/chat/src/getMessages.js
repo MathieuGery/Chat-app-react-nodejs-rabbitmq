@@ -15,8 +15,9 @@ module.exports = async function getMessages(io, broker, username, data) {
             'get-messages',
             messageList
         );
-        if (username === data.username)
+        if (username === messageContent.username) {
             mongoose.addNewMessages(messageContent, data.roomName);
+        }
     }).catch((e) => {
         console.error(e)
     })
