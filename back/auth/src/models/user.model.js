@@ -104,6 +104,14 @@ userSchema.statics = {
     return err
   },
 
+  async listUsers () {
+    const users = await this.find({}).exec()
+    if (!users) throw new APIError(`No users found`, httpStatus.NOT_FOUND)
+
+    return ({ users: users })
+  },
+
+
   async findAndGenerateToken (payload) {
     const { email, password } = payload
     if (!email) throw new APIError('Email must be provided for login')

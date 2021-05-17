@@ -12,15 +12,6 @@ router.post('/login', authController.login)
 router.get('/confirm', authController.confirm)
 router.post('/recover_password', authController.recoverPassword)
 router.post('/recover_password_final', authController.recoverPasswordFinal)
-
-router.get('/secret1', auth(), (req, res) => {
-    res.status(400).json('Secret1 route')
-})
-router.get('/secret2', auth(['admin']), (req, res) => {
-  res.json({ message: 'Only admin can access' })
-})
-router.get('/secret3', auth(['user']), (req, res) => {
-  res.json({ message: 'Only user can access' })
-})
+router.get('/list', auth(), authController.list)
 
 module.exports = router

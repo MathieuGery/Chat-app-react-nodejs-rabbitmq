@@ -22,6 +22,15 @@ exports.register = async (req, res, next) => {
   }
 }
 
+exports.list = async  (req, res, next) => {
+  try {
+    const users = await User.listUsers()
+    res.send(users)
+  } catch (error) {
+    return next()
+  }
+}
+
 exports.login = async (req, res, next) => {
   try {
     const user = await User.findAndGenerateToken(req.body)
