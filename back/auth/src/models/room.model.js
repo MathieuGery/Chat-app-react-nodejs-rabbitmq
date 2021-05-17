@@ -76,7 +76,7 @@ roomSchema.statics = {
         let rooms = await this.find({"members.name":  username}).exec()
         const general = await this.find({"name": "general"}).exec()
         if (!rooms) throw new APIError(`No rooms associated with ${rooms}`, httpStatus.NOT_FOUND)
-        rooms.push(general)
+        rooms.push(general[0])
 
         return ({ rooms: rooms })
     },

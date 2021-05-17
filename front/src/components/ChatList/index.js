@@ -7,6 +7,7 @@ function ChatList(props) {
 
     useEffect(() => {
         listRooms().then((response) => {
+            console.log(response)
             if (response.success) {
                 setRoomsList(response.success.rooms);
             }
