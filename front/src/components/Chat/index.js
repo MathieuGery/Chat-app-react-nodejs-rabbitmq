@@ -9,7 +9,7 @@ export default function Chat(props) {
 
     const sendMessage = (e) => {
         if (message !== "") {
-            sendMessageSocket(message, Cookies.get("username"));
+            sendMessageSocket(message, Cookies.get("username"), props.roomId);
             setMessage("");
             e.preventDefault();
         }

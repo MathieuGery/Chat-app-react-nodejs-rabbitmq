@@ -15,9 +15,9 @@ function getChatMessageSocket(setMessages) {
     });
 }
 
-function sendMessageSocket(message, username) {
+function sendMessageSocket(message, username, roomName) {
     if (!message) return
-    socket.emit("send-message", {message: message, username: username});
+    socket.emit("send-message", {message: message, username: username, roomName: roomName});
 }
 
 function identifyUserChatSocket() {

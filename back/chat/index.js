@@ -50,6 +50,6 @@ io.use((socket, next) => {
 
     socket.on('get-messages', () => {getMessages(io, queue)});
     socket.on('join-room', roomName => {joinRoom(broker, roomName, socket.username)});
-    socket.on('send-message', message => sendMessage(exchange, message));
+    socket.on('send-message', message => sendMessage(broker, message));
     socket.on('disconnect', () => disconnect(socket.username));
 });
