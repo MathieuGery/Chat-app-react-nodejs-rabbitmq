@@ -5,7 +5,10 @@ import ForgotPassword from "../ForgotPassword";
 import RecoverPassword from "../RecoverPassword";
 import Home from "../Home";
 import Cookies from "js-cookie";
-
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure()
 const PrivateRoute = ({component: Component, ...rest}) => (
     <Route
         {...rest}
@@ -21,6 +24,8 @@ const PrivateRoute = ({component: Component, ...rest}) => (
 
 function App() {
     return (
+        <>
+        <ToastContainer />
         <BrowserRouter>
             <div className="">
                 <Switch>
@@ -32,6 +37,7 @@ function App() {
                 </Switch>
             </div>
         </BrowserRouter>
+            </>
     );
 }
 

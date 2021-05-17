@@ -21,6 +21,7 @@ function Login(props) {
                 setAlertMessage({success: "You have been authenticated"})
                 Cookies.set('jwt', response.success.token, {expires: 91});
                 Cookies.set('username', response.success.username, {expires: 91});
+                Cookies.set('email', response.success.email, {expires: 91});
                 setTimeout(() => {
                     props.history.push('/contact');
                 }, 500);

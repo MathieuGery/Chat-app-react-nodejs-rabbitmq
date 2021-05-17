@@ -2,7 +2,6 @@ const mongoose = require('../mongoose');
 
 module.exports = async function getMessages(io, broker, username, data) {
     const queue = await broker.queue(username + "-" + data.roomName + "-queue").assert()
-    console.log("get room messages")
     const messageList = await mongoose.getRoomMessages(data.roomName);
     io.emit(
         'get-messages',

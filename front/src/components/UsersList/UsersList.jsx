@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import listUsers from "../../requests/Auth/listUsers";
 import Cookies from "js-cookie";
+import createRoom from "../../requests/Rooms/createRoom";
+import { toast } from 'react-toastify';
 
-export default function UsersList() {
+export default function UsersList(props) {
     const [usersList, setUsersList] = useState([])
 
     useEffect(() => {
@@ -13,8 +15,15 @@ export default function UsersList() {
             }).catch(() => {});
     }, []);
 
-    const newMessage = () => {
-        console.log("nouveau message");
+    const newMessage = (user) => {
+        createRoom(Cookies.get("email"), Cookies.get("username") + "-" + user.name, [{"name": Cookies.get("email"), "status": "pending"}, {"name": user.email, "status": "pending"}]).then((response) => {
+            if (response.success) {
+                toast.success("Room has been created !")
+                props.setShow(false);
+            }
+        }).catch(() => { toast.error("Room has already been created");
+            props.setShow(false);
+        });
     }
 
     const buildList = () => {
@@ -26,7 +35,7 @@ export default function UsersList() {
         <ul>
             {buildList()}
             {usersList.map((user, key) => (
-                <li key={key} className="mx-auto flex flex-row justify-between m-6 p-2 border-b border-solid border-blueGray-200" onClick={() => {newMessage()}}>
+                <li key={key} className="mx-auto flex flex-row justify-between m-6 p-2 border-b border-solid border-blueGray-200">
                     <div className="flex flex-row">
                         <div>
                             <span className="flex-shrink-0 inline-block relative">
@@ -40,7 +49,7 @@ export default function UsersList() {
                         </div>
                     </div>
                     <div>
-                        <button onClick={() => {newMessage()}} type="button" className="inline-flex items-center px-3 py-1.5 border border-transparent shadow-sm text-sm leading-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button onClick={() => {newMessage(user)}} type="button" className="inline-flex items-center px-3 py-1.5 border border-transparent shadow-sm text-sm leading-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             New message
                             <svg className="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>

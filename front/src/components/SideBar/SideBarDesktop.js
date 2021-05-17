@@ -24,7 +24,7 @@ function SideBarDesktop() {
 
     return (
         <>
-            <Modal show={showModal} open={openModal} close={closeModal}/>
+            <Modal show={showModal} open={openModal} close={closeModal} setShow={setShowModal}/>
             <div className="hidden lg:flex lg:flex-shrink-0">
                 <div className="flex flex-col w-20">
                     <div className="flex flex-col h-0 flex-1 overflow-y-auto bg-indigo-600">

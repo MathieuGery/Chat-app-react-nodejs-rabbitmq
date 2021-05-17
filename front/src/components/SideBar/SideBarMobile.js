@@ -25,7 +25,7 @@ function SideBarMobile(props) {
 
     return (
         <>
-            <Modal show={showModal} open={openModal} close={closeModal}/>
+            <Modal show={showModal} open={openModal} close={closeModal} setShow={setShowModal}/>
             <div className="lg:hidden">
                 <div className="fixed inset-0 flex z-40">
                     <Transition
