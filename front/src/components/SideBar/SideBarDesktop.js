@@ -33,14 +33,14 @@ function SideBarDesktop() {
                                 <Logo/>
                             </div>
                             <nav aria-label="Sidebar" className="py-6 flex flex-col justify-between h-full items-center space-y-3">
-                                <button className="btn flex items-center p-4 rounded-lg text-indigo-200 hover:bg-indigo-700" onClick={() => {openModal()}}>
+                                <button className="btn flex items-center p-4 rounded-lg text-indigo-200 hover:bg-indigo-800 bg-indigo-700" onClick={() => {openModal()}}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                     </svg>
                                     <span className="sr-only">New message</span>
                                 </button>
 
-                                <button className="btn flex items-center p-4 rounded-lg text-indigo-200 hover:bg-indigo-700" onClick={() => {logout()}}>
+                                <button className="btn flex items-center p-4 rounded-lg text-indigo-200 hover:bg-indigo-800 bg-indigo-700" onClick={() => {logout()}}>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                     </svg>
