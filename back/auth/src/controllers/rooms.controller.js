@@ -20,7 +20,7 @@ exports.create = async (req, res, next) => {
 
 exports.listRooms = async (req, res, next) => {
     try {
-        const rooms = await Room.listAllRooms()
+        const rooms = await Room.listAllRooms(req.body.username)
         res.send(rooms)
     } catch (error) {
         return next()

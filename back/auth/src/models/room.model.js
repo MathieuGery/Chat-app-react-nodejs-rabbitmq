@@ -72,8 +72,9 @@ roomSchema.statics = {
         return err
     },
 
-    async listAllRooms () {
-        const rooms = await this.find({ }).exec()
+    async listAllRooms (username) {
+        console.log(username);
+        const rooms = await this.find({"members.name":  username}).exec()
         if (!rooms) throw new APIError(`No rooms associated with ${rooms}`, httpStatus.NOT_FOUND)
 
         return ({ rooms: rooms })
