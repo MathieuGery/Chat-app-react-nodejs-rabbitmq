@@ -1,19 +1,22 @@
-let rabbitConn = require('../rabbitmq')
+const mongoose = require('../mongoose');
 
 module.exports = async function getMessages(io, broker, username, data) {
-    console.log('fired');
-
     const queue = await broker.queue(username + "-" + data.roomName + "-queue").assert()
-    queue.sub(msg => {
+    const messageList = await mongoose.getRoomMessages(data.roomName);
+    io.emit(
+        'get-messages',
+        messageList
+    );
+    queue.sub(async msg => {
         const messageContent = msg.content;
-        console.log("From Rabbitmq", messageContent);
-        try {
-            io.emit(
-                'get-messages',
-                [messageContent]
-            );
-        } catch (e) {
-            console.log(e);
-        }
+        const messageList = await mongoose.getRoomMessages(data.roomName);
+        messageList.push(messageContent);
+        io.emit(
+            'get-messages',
+            messageList
+        );
+        mongoose.addNewMessages(messageContent, data.roomName);
+    }).catch((e) => {
+        console.error(e)
     })
 }

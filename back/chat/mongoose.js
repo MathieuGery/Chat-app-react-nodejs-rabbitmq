@@ -40,3 +40,8 @@ exports.addNewMessages = function (message, roomName)  {
         }
     });
 }
+
+exports.getRoomMessages = async function (roomName)  {
+    let res = await rooms_db?.findOne({name: roomName});
+    return res.messages
+}

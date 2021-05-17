@@ -37,19 +37,10 @@ io.use((socket, next) => {
     preConnection(socket, next)
 }).on('connection', async (socket) => { // socket object may be used to send specific messages to the new connected client
     connection(socket)
-    const broker = await new Rabbit({ connection: process.env.RABBITMQURI }).connect()
-
-    // creates the exchange if it does not exist
-    const exchange = await broker.exchange("general-exchanger", {type: "fanout"}).assert()
-
-    // creates the queue if it does not exist
-    const queue = await broker.queue(`${socket.username}-general-queue`).assert()
-
-    // bind the queue to the exchange (if it wasn't already done)
-    await exchange.bind(queue)
+    const broker = await new Rabbit({ connection: process.env.RABBITMQURI }).connect();
 
     socket.on('get-messages', data => {getMessages(io, broker, socket.username, data)});
-    socket.on('join-room', roomName => {joinRoom(broker, roomName, socket.username)});
+    socket.on('join-room', room => {joinRoom(broker, room, socket.username)});
     socket.on('send-message', message => sendMessage(broker, message));
     socket.on('disconnect', () => disconnect(socket.username));
 });

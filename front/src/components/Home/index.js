@@ -3,7 +3,7 @@ import SideBarMobile from "../SideBar/SideBarMobile";
 import SideBarDesktop from "../SideBar/SideBarDesktop";
 import ChatList from "../ChatList";
 import Chat from "../Chat";
-import {getChatMessageSocket, identifyUserChatSocket} from "../../helpers/socket";
+import {getChatMessageSocket, requestMessages} from "../../helpers/socket";
 import Logo from "../utils/Logo";
 
 

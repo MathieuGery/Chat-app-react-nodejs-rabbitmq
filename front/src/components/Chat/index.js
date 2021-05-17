@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {getChatMessageSocket, identifyUserChatSocket, sendMessageSocket} from "../../helpers/socket";
+import {getChatMessageSocket, requestMessages, sendMessageSocket} from "../../helpers/socket";
 import Message from "./Message";
 import Cookies from "js-cookie";
 
@@ -16,9 +16,10 @@ export default function Chat(props) {
     }
 
     useEffect(() => {
-        identifyUserChatSocket(props.roomId);
+        console.log(props.roomId)
+        requestMessages(props.roomId);
         getChatMessageSocket(setAllMessages)
-    }, []);
+    }, [props.roomId]);
 
     const buildMessageList = () => {
         if (allMessages.length === 0) {
@@ -34,12 +35,12 @@ export default function Chat(props) {
             <div className="flex flex-row justify-center items-center border-b border-solid border-blueGray-200 p-2">
                 <p>Room ID: {props.roomId}</p>
             </div>
-            <div className="flex flex-col overflow-y-auto">
+            <div className="flex flex-col overflow-y-scroll overflow-x-hidden" style={{height: '90vh'}}>
                 {buildMessageList()}
             </div>
-            <button onClick={(e) => {identifyUserChatSocket(e)}} type="button" className="inline-flex items-center px-3 py-1.5 ml-4 border border-transparent shadow-sm text-sm leading-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                send get-messages signal
-            </button>
+            {/*<button onClick={(e) => {requestMessages(e)}} type="button" className="inline-flex items-center px-3 py-1.5 ml-4 border border-transparent shadow-sm text-sm leading-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">*/}
+            {/*    send get-messages signal*/}
+            {/*</button>*/}
             <form noValidate onSubmit={(e) => {sendMessage(e)}}>
                 <div className="absolute inset-x-0 bottom-0 flex flex-row m-2">
                     <input type="text" name="message" id="message" placeholder="Type your message"

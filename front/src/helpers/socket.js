@@ -20,7 +20,7 @@ function sendMessageSocket(message, username, roomName) {
     socket.emit("send-message", {message: message, username: username, roomName: roomName});
 }
 
-function identifyUserChatSocket(roomName) {
+function requestMessages(roomName) {
     socket.emit("get-messages", {roomName: roomName});
 }
 
@@ -28,4 +28,4 @@ function joinRoomChatSocket(roomName) {
     socket.emit("join-room", {roomName: roomName});
 }
 
-export { getChatMessageSocket, sendMessageSocket, identifyUserChatSocket, joinRoomChatSocket}
+export { getChatMessageSocket, sendMessageSocket, requestMessages, joinRoomChatSocket}
