@@ -48,13 +48,6 @@ function SideBarDesktop() {
                                 </button>
                             </nav>
                         </div>
-                        <div className="flex-shrink-0 flex pb-5">
-                            <img className="block mx-auto h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80" alt=""/>
-                            <div className="sr-only">
-                                <p>Lisa Marie</p>
-                                <p>Account settings</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
