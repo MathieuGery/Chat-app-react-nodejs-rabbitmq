@@ -6,7 +6,7 @@ const sendMail = (next, email, subject, text, message) => {
         sgMail.setApiKey(process.env.SENDGRID_API_KEY)
         const msg = {
             to: email,
-            from: 'noreply.mytelegram@gery.me',
+            from: 'mathieu.gery@outlook.com',
             subject: subject,
             text: text,
             html: message

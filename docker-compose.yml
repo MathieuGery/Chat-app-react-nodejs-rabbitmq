@@ -9,7 +9,7 @@ services:
       - HOSTNAME=http://localhost:5000
       - APP_SECRET=qsefoiqspdoifpoquisupo32euiqdpoifuqs34efcqsdfqsef
       - MONGOURI=mongodb://mongo:27017/chatapp
-      - SENDGRID_API_KEY=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
+      - SENDGRID_API_KEY=
       - FRONTURL=http://localhost:3000
     ports:
       - 5000:5000
