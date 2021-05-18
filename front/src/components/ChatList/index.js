@@ -29,7 +29,6 @@ function ChatList(props) {
                                 <div className="flex-1 flex items-center min-w-0 relative">
                                     <span className="flex-shrink-0 inline-block relative">
                                         <img className="h-10 w-10 rounded-full" src='https://picsum.photos/200/300' alt=""/>
-                                        <span className="bg-green-400 absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white" aria-hidden="true"/>
                                     </span>
                                     <div className="ml-4 truncate">
                                         <p className="text-sm font-medium text-gray-900 truncate">{room.name}</p>
