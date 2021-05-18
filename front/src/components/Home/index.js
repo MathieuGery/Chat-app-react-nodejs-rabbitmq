@@ -9,7 +9,13 @@ import Logo from "../utils/Logo";
 
 function Home() {
     const [isOpen, setIsOpen] = useState(false);
-    const [roomId, setRoomId] = useState('general');
+    // const [message, setMessage] = useState("'");
+    const [roomId, setRoomId] = useState("general");
+
+    useEffect(() => {
+        //getChatMessageSocket(setMessage)
+        // identifyUserChatSocket("test")
+    }, []);
 
     return (
         <div className="h-screen flex bg-gray-50 overflow-hidden">
