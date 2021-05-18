@@ -23,8 +23,9 @@ function requestMessages(roomName) {
     socket.emit("get-messages", {roomName: roomName});
 }
 
-function joinRoomChatSocket(roomName) {
-    socket.emit("join-room", {roomName: roomName});
+function disconnectSocket() {
+    socket.close();
 }
 
-export { getChatMessageSocket, sendMessageSocket, requestMessages, joinRoomChatSocket}
+
+export { getChatMessageSocket, sendMessageSocket, requestMessages, disconnectSocket}

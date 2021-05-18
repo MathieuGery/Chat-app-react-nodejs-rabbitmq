@@ -8,7 +8,7 @@ When('I register', () => {
         result.push(characters.charAt(Math.floor(Math.random() *
             charactersLength)));
     }
-    cy.registerWith({username: 'kjshfdkhsf', email: `${result.join('')}@outlook.com`, password: 'jojsdjfoisijfojid', cpassword: 'jojsdjfoisijfojid'})
+    cy.registerWith({username: `${result.join('')}`, email: `${result.join('')}@outlook.com`, password: 'jojsdjfoisijfojid', cpassword: 'jojsdjfoisijfojid'})
 })
 
 Then('a success alert is displayed', () => {

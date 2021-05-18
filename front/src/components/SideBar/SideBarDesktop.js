@@ -4,6 +4,7 @@ import Modal from "../utils/Modal";
 import { useHistory } from "react-router-dom";
 import Cookies from "js-cookie";
 import CreateRoom from "../CreateRoom";
+import {disconnectSocket} from "../../helpers/socket";
 
 function SideBarDesktop() {
     let history = useHistory();
@@ -26,6 +27,7 @@ function SideBarDesktop() {
         setShowModalCreateRoom(false);
     }
     const logout = () => {
+        disconnectSocket();
         Cookies.remove('jwt');
         Cookies.remove('username');
         history.push('/');

@@ -1,7 +1,7 @@
 import {When, Then} from 'cypress-cucumber-preprocessor/steps'
 
 When('I login', () => {
-    cy.loginWith({email: 'bamoniw503@684hh.com', password: 'jojsdjfoisijfojid'})
+    cy.loginWith({email: 'gregoire.lanfranchini@epitech.eu', password: 'Gregoire2%='})
 })
 
 Then('a success alert is displayed', () => {

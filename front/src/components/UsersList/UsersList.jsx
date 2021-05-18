@@ -20,6 +20,7 @@ export default function UsersList(props) {
             if (response.success) {
                 toast.success("Room has been created !")
                 props.setShow(false);
+                window.location.reload();
             }
         }).catch(() => { toast.error("Room has already been created");
             props.setShow(false);
