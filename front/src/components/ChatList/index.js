@@ -1,13 +1,11 @@
 import {useEffect, useState} from "react";
 import listRooms from "../../requests/Rooms/list";
-import {joinRoomChatSocket} from "../../helpers/socket";
 
 function ChatList(props) {
     const [roomsList, setRoomsList] = useState([])
 
     useEffect(() => {
         listRooms().then((response) => {
-            console.log(response)
             if (response.success) {
                 setRoomsList(response.success.rooms);
             }
@@ -18,7 +16,6 @@ function ChatList(props) {
 
     const changeRoom = (roomID) => {
         props.setRoomId(roomID);
-        joinRoomChatSocket(roomID);
     }
 
     return (

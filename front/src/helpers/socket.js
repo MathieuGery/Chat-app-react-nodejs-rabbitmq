@@ -19,8 +19,8 @@ function sendMessageSocket(message, username, roomName) {
     socket.emit("send-message", {message: message, username: username, roomName: roomName});
 }
 
-function requestMessages(currentRoomName, newRoomName) {
-    socket.emit("get-messages", {currentRoomName: currentRoomName, newRoomName: newRoomName});
+function requestMessages(roomName) {
+    socket.emit("get-messages", {roomName: roomName});
 }
 
 function joinRoomChatSocket(roomName) {

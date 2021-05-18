@@ -3,7 +3,6 @@ const connection = require("./src/connection");
 const getMessages = require("./src/getMessages");
 const sendMessage = require("./src/sendMessage");
 const disconnect = require("./src/disconnect");
-const joinRoom = require("./src/joinRoom")
 
 let app = require('express')();
 require('dotenv').config()
@@ -38,9 +37,14 @@ io.use((socket, next) => {
 }).on('connection', async (socket) => { // socket object may be used to send specific messages to the new connected client
     connection(socket)
     const broker = await new Rabbit({ connection: process.env.RABBITMQURI }).connect();
-
-    socket.on('get-messages', room => {getMessages(io, broker, socket.username, room)});
-    socket.on('join-room', room => {joinRoom(broker, room, socket.username)});
+    let subbedQueueName = null;
+    socket.on('get-messages', async room => {
+        if (subbedQueueName) {
+            const queue = await broker.queue(subbedQueueName).assert();
+            await queue.cancel();
+        }
+        subbedQueueName = await getMessages(io, broker, socket.username, room);
+    });
     socket.on('send-message', message => sendMessage(broker, message));
     socket.on('disconnect', () => disconnect(socket.username));
 });

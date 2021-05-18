@@ -7,7 +7,6 @@ export default function Chat(props) {
     const [message, setMessage] = useState("");
     const [allMessages, setAllMessages] = useState([]);
     const messagesContainerRef = useRef(null);
-    const [currentRoomId, setCurrentRoomId] = useState('general')
 
     const sendMessage = (e) => {
         if (message !== "") {
@@ -18,9 +17,8 @@ export default function Chat(props) {
     }
 
     useEffect(() => {
-        requestMessages(currentRoomId, props.roomId);
+        requestMessages(props.roomId);
         getChatMessageSocket(setAllMessages, messagesContainerRef);
-        setCurrentRoomId(props.roomId);
     }, [props.roomId]);
 
     const buildMessageList = () => {
