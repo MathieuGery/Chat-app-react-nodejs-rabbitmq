@@ -39,7 +39,7 @@ io.use((socket, next) => {
     connection(socket)
     const broker = await new Rabbit({ connection: process.env.RABBITMQURI }).connect();
 
-    socket.on('get-messages', data => {getMessages(io, broker, socket.username, data)});
+    socket.on('get-messages', room => {getMessages(io, broker, socket.username, room)});
     socket.on('join-room', room => {joinRoom(broker, room, socket.username)});
     socket.on('send-message', message => sendMessage(broker, message));
     socket.on('disconnect', () => disconnect(socket.username));

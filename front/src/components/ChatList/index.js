@@ -19,7 +19,6 @@ function ChatList(props) {
     const changeRoom = (roomID) => {
         props.setRoomId(roomID);
         joinRoomChatSocket(roomID);
-
     }
 
     return (
