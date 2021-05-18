@@ -12,15 +12,14 @@ module.exports = async function getMessages(io, broker, username, room) {
     );
     queue.sub(async msg => {
         const messageContent = msg.content;
+        if (username === messageContent.username) {
+            await mongoose.addNewMessages(messageContent, room.roomName);
+        }
         const messageList = await mongoose.getRoomMessages(room.roomName);
-        messageList.push(messageContent);
         io.emit(
             'get-messages',
             messageList
         );
-        if (username === messageContent.username) {
-            mongoose.addNewMessages(messageContent, room.roomName);
-        }
     }).catch((e) => {
         console.error(e)
     })

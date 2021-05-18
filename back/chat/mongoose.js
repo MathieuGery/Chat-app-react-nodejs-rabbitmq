@@ -29,15 +29,8 @@ exports.setConnectedUser = function (username, status)  {
     });
 }
 
-exports.addNewMessages = function (message, roomName)  {
-    rooms_db?.findOneAndUpdate({name: roomName}, {$push: {messages: message}}, function (err, res) {
-        if (!res.value) {
-            console.log("No Room found");
-        }
-        if (err)  {
-            throw err;
-        }
-    });
+exports.addNewMessages = async function (message, roomName)  {
+    await rooms_db?.findOneAndUpdate({name: roomName}, {$push: {messages: message}});
 }
 
 exports.getRoomMessages = async function (roomName)  {
