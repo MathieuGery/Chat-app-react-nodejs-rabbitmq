@@ -45,6 +45,6 @@ io.use((socket, next) => {
         }
         subbedQueueName = await getMessages(io, broker, socket.username, room);
     });
-    socket.on('send-message', message => sendMessage(broker, message));
+    socket.on('send-message', message => sendMessage(broker, message, socket.username));
     socket.on('disconnect', () => disconnect(socket.username));
 });

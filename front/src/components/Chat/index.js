@@ -22,7 +22,8 @@ export default function Chat(props) {
     }, [props.roomId]);
 
     const buildMessageList = () => {
-        if (allMessages.length === 0) {
+        console.log(allMessages);
+        if (allMessages?.length === 0) {
             return <div className="w-full text-center mt-6 text-gray-500">No message</div>
         }
         return allMessages?.map((message, index) => {
