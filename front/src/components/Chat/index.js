@@ -17,13 +17,14 @@ export default function Chat(props) {
     }
 
     useEffect(() => {
+        setAllMessages([]);
         requestMessages(props.roomId);
         getChatMessageSocket(setAllMessages, messagesContainerRef);
     }, [props.roomId]);
 
     const buildMessageList = () => {
         console.log(allMessages);
-        if (allMessages?.length === 0) {
+        if (!allMessages || allMessages?.length === 0) {
             return <div className="w-full text-center mt-6 text-gray-500">No message</div>
         }
         return allMessages?.map((message, index) => {
@@ -34,7 +35,7 @@ export default function Chat(props) {
     return (
         <div className="flex flex-col w-full">
             <div className="flex flex-row justify-center items-center border-b border-solid border-blueGray-200 p-2">
-                <p>Room ID: {props.roomId}</p>
+                <p className="flex">Room: <p className="ml-2 font-bold">{props.roomId}</p></p>
             </div>
             <div className="flex flex-col overflow-y-scroll overflow-x-hidden" style={{height: '90vh'}}>
                 {buildMessageList()}
